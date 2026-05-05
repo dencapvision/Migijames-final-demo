@@ -1,0 +1,12 @@
+# ══════════════════════════════════════════════
+# Cloudflare Worker Config — MigiJames
+# ══════════════════════════════════════════════
+
+name       = "migijames-line-proxy"
+main       = "worker.js"
+compatibility_date = "2024-01-01"
+
+# Environment Variables (Secrets)
+# ตั้งค่าผ่าน CLI หรือ Dashboard — ไม่เก็บใน file นี้
+# รัน: wrangler secret put LINE_TOKEN
+# รัน: wrangler secret put LINE_USER_ID
