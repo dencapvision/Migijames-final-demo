@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MigiJames — ข้อมูลโครงการ (Onboarding)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Sarabun:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: #f5ede0;
+      font-family: 'Sarabun', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      padding: 40px 16px 80px
+    }
+
+    .card {
+      max-width: 650px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 40px rgba(0, 0, 0, .10)
+    }
+
+    .card-header {
+      background: #1a1612;
+      padding: 40px 32px 32px;
+      text-align: center;
+      position: relative
+    }
+
+    .card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, transparent, #c9a96e, transparent)
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      color: #fff;
+      font-weight: 400;
+      letter-spacing: .04em;
+      margin-bottom: 8px
+    }
+
+    .logo em {
+      color: #c9a96e;
+      font-style: normal
+    }
+
+    .logo-sub {
+      font-size: 10px;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .3);
+      margin-bottom: 20px
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: rgba(201, 169, 110, .15);
+      border: 1px solid rgba(201, 169, 110, .3);
+      color: #c9a96e;
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: 6px 20px;
+      border-radius: 20px
+    }
+
+    .card-body {
+      padding: 40px 32px
+    }
+
+    .section-title {
+      font-size: 11px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .section-title:first-child {
+      margin-top: 0;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: #c9a96e
+    }
+
+    .field {
+      margin-bottom: 24px
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: #6b5d52;
+      margin-bottom: 10px;
+      font-weight: 500
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #e0d5c8;
+      border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 14px;
+      color: #1a1612;
+      background: #faf8f5;
+      outline: none;
+      transition: all .3s;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: #c9a96e;
+      box-shadow: 0 0 0 4px rgba(201, 169, 110, .1);
+      background: #fff
+    }
+
+    /* Items Container */
+    .item-box {
+      background: #fff;
+      border: 1px solid #e0d5c8;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+      position: relative;
+      transition: all 0.3s;
+    }
+
+    .item-box:hover {
+      border-color: #c9a96e;
+      box-shadow: 0 4px 20px rgba(201, 169, 110, 0.08);
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px dotted #e0d5c8;
+    }
+
+    .item-num {
+      font-size: 12px;
+      font-weight: 500;
+      color: #c9a96e;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      color: #ff6b6b;
+      font-size: 11px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px
+    }
+
+    .pill {
+      font-family: 'Sarabun', sans-serif;
+      font-size: 12px;
+      letter-spacing: .05em;
+      padding: 10px 20px;
+      border: 1px solid #e0d5c8;
+      border-radius: 8px;
+      background: #faf8f5;
+      color: #6b5d52;
+      cursor: pointer;
+      transition: all .25s
+    }
+
+    .pill:hover {
+      border-color: #c9a96e;
+      color: #9a7a4a
+    }
+
+    .pill.active {
+      border-color: #c9a96e;
+      background: rgba(201, 169, 110, .1);
+      color: #9a7a4a;
+      font-weight: 500
+    }
+
+    .add-btn {
+      width: 100%;
+      padding: 14px;
+      border: 1px dashed #c9a96e;
+      border-radius: 10px;
+      background: rgba(201, 169, 110, 0.03);
+      color: #9a7a4a;
+      font-size: 13px;
+      cursor: pointer;
+      margin-bottom: 32px;
+      transition: all 0.2s;
+    }
+
+    .add-btn:hover {
+      background: rgba(201, 169, 110, 0.08);
+      border-style: solid;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: #1a1612;
+      color: #fff;
+      border: none;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 24px;
+      letter-spacing: .1em;
+      transition: all .3s;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .2)
+    }
+
+    .submit-btn:hover {
+      background: #2a2622;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(0, 0, 0, .3)
+    }
+
+    #errMsg {
+      display: none;
+      background: #fff2f2;
+      color: #d63031;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-top: 20px;
+      border-left: 4px solid #d63031
+    }
+
+    .success-screen {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center
+    }
+
+    .success-icon {
+      width: 80px;
+      height: 80px;
+      background: #f0f7f4;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px
+    }
+
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: #1a1612;
+      margin-bottom: 12px
+    }
+
+    .success-text {
+      color: #6b5d52;
+      font-size: 15px;
+      line-height: 1.6
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 20px 12px 60px }
+      .card-body { padding: 32px 20px }
+      .logo { font-size: 28px }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="card-header">
+      <div class="logo">Migi<em>James</em></div>
+      <div class="logo-sub">Luxury Digital Craftsmanship</div>
+      <div class="header-badge">Project Onboarding</div>
+    </div>
+    <div class="card-body">
+      
+      <!-- Section 1: Business -->
+      <div class="section-title">1. ข้อมูลธุรกิจเบื้องต้น</div>
+      <div class="field">
+        <label>ชื่อแบรนด์ / โปรเจกต์</label>
+        <input type="text" id="projectName" placeholder="เช่น MigiJames Studio">
+      </div>
+      <div class="field">
+        <label>ชื่อเจ้าของโครงการ (Gmail ที่ใช้ติดต่อ)</label>
+        <input type="email" id="gmail" placeholder="example@gmail.com">
+      </div>
+
+      <!-- Section 2: Content -->
+      <div class="section-title">2. สินค้าและบริการ (Content Collection)</div>
+      <div id="itemsContainer">
+        <!-- Template Item -->
+        <div class="item-box">
+          <div class="item-header">
+            <span class="item-num">ข้อมูลชิ้นที่ 1</span>
+          </div>
+          <div class="field">
+            <label>ชื่อสินค้า / บริการ</label>
+            <input type="text" class="item-name" placeholder="เช่น บริการถ่ายภาพโปรไฟล์">
+          </div>
+          <div class="field">
+            <label>รายละเอียด / จุดเด่น (สั้นๆ)</label>
+            <textarea class="item-desc" rows="2" placeholder="อธิบายความพิเศษของสินค้านี้"></textarea>
+          </div>
+          <div class="field" style="margin-bottom: 0;">
+            <label>ราคา (ถ้ามี)</label>
+            <input type="text" class="item-price" placeholder="เช่น ฿3,500">
+          </div>
+        </div>
+      </div>
+      <button type="button" class="add-btn" onclick="addItem()">+ เพิ่มรายการสินค้า/บริการใหม่</button>
+
+      <!-- Section 3: Visuals -->
+      <div class="section-title">3. ลิงก์ไฟล์และรูปภาพ</div>
+      <div class="field">
+        <label>ลิงก์โฟลเดอร์ไฟล์ (Google Drive / Dropbox)</label>
+        <input type="url" id="mediaLink" placeholder="วางลิงก์ที่รวมไฟล์ Logo, รูปสินค้า ไว้ที่นี่">
+        <p style="font-size: 11px; color: #9a7a4a; margin-top: 8px;">* กรุณาเปิดสิทธิ์การเข้าถึงเป็น 'ทุกคนที่มีลิงก์' (Anyone with link)</p>
+      </div>
+
+      <!-- Section 4: Identity -->
+      <div class="section-title">4. สไตล์และเป้าหมาย</div>
+      <div class="field">
+        <label>Mood & Tone ที่ต้องการ</label>
+        <div class="pills" id="mood">
+          <button type="button" class="pill" data-val="Luxury / พรีเมียม" onclick="selectPill(this,'mood')">Luxury</button>
+          <button type="button" class="pill" data-val="Minimal / เรียบง่าย" onclick="selectPill(this,'mood')">Minimal</button>
+          <button type="button" class="pill" data-val="Modern / ทันสมัย" onclick="selectPill(this,'mood')">Modern</button>
+          <button type="button" class="pill" data-val="Classic / คลาสสิก" onclick="selectPill(this,'mood')">Classic</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>กลุ่มเป้าหมาย (ลูกค้าคือใคร?)</label>
+        <input type="text" id="target" placeholder="เช่น วัยทำงาน อายุ 25-45 ปี ที่ชอบงานศิลปะ">
+      </div>
+      <div class="field">
+        <label>เว็บไซต์อ้างอิงที่ชอบ (References)</label>
+        <textarea id="refs" rows="2" placeholder="เช่น apple.com, behance.net/gallery/xxx"></textarea>
+      </div>
+
+      <div id="errMsg"></div>
+      <button class="submit-btn" id="submitBtn" onclick="submitOnboarding()">
+        ✦ &nbsp; ส่งข้อมูลเริ่มต้นพัฒนาโปรเจกต์
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Success Screen -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5a8a72" stroke-width="2.5">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+    </div>
+    <h2 class="success-title">ได้รับข้อมูลแล้ว!</h2>
+    <p class="success-text">ขอบคุณที่ให้ข้อมูลครับ<br>MigiJames จะเริ่มวิเคราะห์และวางโครงสร้างให้คุณทันที<br>เราจะติดต่อกลับทาง Gmail หรือ LINE โดยเร็วที่สุด</p>
+  </div>
+
+  <script>
+    const WORKER_URL = 'https://migijames-line-proxy.dencapvision.workers.dev'
+    const state = { mood: '' }
+
+    function addItem() {
+      const container = document.getElementById('itemsContainer')
+      const count = container.children.length + 1
+      const div = document.createElement('div')
+      div.className = 'item-box'
+      div.innerHTML = `
+        <div class="item-header">
+          <span class="item-num">ข้อมูลชิ้นที่ ${count}</span>
+          <button class="remove-btn" onclick="this.parentElement.parentElement.remove()">ลบ</button>
+        </div>
+        <div class="field">
+          <label>ชื่อสินค้า / บริการ</label>
+          <input type="text" class="item-name" placeholder="เช่น บริการถ่ายภาพโปรไฟล์">
+        </div>
+        <div class="field">
+          <label>รายละเอียด / จุดเด่น (สั้นๆ)</label>
+          <textarea class="item-desc" rows="2" placeholder="อธิบายความพิเศษของสินค้านี้"></textarea>
+        </div>
+        <div class="field" style="margin-bottom: 0;">
+          <label>ราคา (ถ้ามี)</label>
+          <input type="text" class="item-price" placeholder="เช่น ฿3,500">
+        </div>
+      `
+      container.appendChild(div)
+    }
+
+    function selectPill(btn, group) {
+      document.querySelectorAll(`#${group} .pill`).forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      state[group] = btn.dataset.val
+    }
+
+    function showErr(msg) {
+      const el = document.getElementById('errMsg')
+      el.textContent = msg; el.style.display = 'block'
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+
+    async function submitOnboarding() {
+      const btn = document.getElementById('submitBtn')
+      const projectName = document.getElementById('projectName').value.trim()
+      const gmail = document.getElementById('gmail').value.trim()
+      const mediaLink = document.getElementById('mediaLink').value.trim()
+      const target = document.getElementById('target').value.trim()
+      const refs = document.getElementById('refs').value.trim()
+
+      if (!projectName) return showErr('กรุณากรอกชื่อแบรนด์')
+      if (!gmail) return showErr('กรุณากรอก Gmail')
+      if (!mediaLink) return showErr('กรุณาแนบลิงก์ไฟล์รูปภาพ')
+
+      btn.disabled = true; btn.textContent = 'กำลังส่งข้อมูล...'
+
+      // Collect items
+      const items = []
+      document.querySelectorAll('.item-box').forEach(box => {
+        const name = box.querySelector('.item-name').value.trim()
+        if (name) {
+          items.push({
+            name: name,
+            desc: box.querySelector('.item-desc').value.trim(),
+            price: box.querySelector('.item-price').value.trim()
+          })
+        }
+      })
+
+      const payload = {
+        type: 'Onboarding',
+        projectName,
+        gmail,
+        mediaLink,
+        mood: state.mood,
+        target,
+        refs,
+        itemsCount: items.length,
+        items: items.map(i => `• ${i.name} (${i.price}): ${i.desc}`).join('\n')
+      }
+
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        })
+        if (res.ok) {
+          document.getElementById('successScreen').style.display = 'flex'
+          window.scrollTo(0, 0)
+        } else {
+          showErr('ขออภัย ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง')
+          btn.disabled = false; btn.textContent = 'ส่งข้อมูลเริ่มต้นพัฒนาโปรเจกต์'
+        }
+      } catch (e) {
+        showErr('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้')
+        btn.disabled = false; btn.textContent = 'ส่งข้อมูลเริ่มต้นพัฒนาโปรเจกต์'
+      }
+    }
+  </script>
+</body>
+</html>
