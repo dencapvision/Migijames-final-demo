@@ -1,349 +1,782 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>MigiJames — เริ่มต้นโปรเจกต์</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Sarabun:wght@300;400;500&display=swap" rel="stylesheet"/>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:#f5ede0;font-family:'Sarabun',sans-serif;font-weight:300;min-height:100vh;padding:40px 16px 80px}
-.card{max-width:600px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 40px rgba(0,0,0,.10)}
-.card-header{background:#1a1612;padding:36px 32px 28px;text-align:center;position:relative}
-.card-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(to right,transparent,#c9a96e,transparent)}
-.logo{font-family:'Playfair Display',serif;font-size:32px;color:#fff;font-weight:400;letter-spacing:.04em;margin-bottom:6px}
-.logo em{color:#c9a96e;font-style:normal}
-.logo-sub{font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px}
-.header-badge{display:inline-block;background:rgba(201,169,110,.15);border:1px solid rgba(201,169,110,.3);color:#c9a96e;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border-radius:20px}
-.card-body{padding:32px}
-.section-title{font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:#c9a96e;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.section-title::before{content:'';width:20px;height:1px;background:#c9a96e}
-.field{margin-bottom:24px}
-.field label{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#6b5d52;margin-bottom:8px;font-weight:400}
-.field input,.field textarea{width:100%;padding:12px 14px;border:1px solid #e0d5c8;border-radius:8px;font-family:'Sarabun',sans-serif;font-size:14px;color:#1a1612;background:#faf8f5;outline:none;transition:border-color .3s,box-shadow .3s;resize:vertical}
-.field input:focus,.field textarea:focus{border-color:#c9a96e;box-shadow:0 0 0 3px rgba(201,169,110,.12);background:#fff}
-.field input::placeholder,.field textarea::placeholder{color:#b8a898}
-.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.pill{font-family:'Sarabun',sans-serif;font-size:12px;letter-spacing:.1em;padding:9px 18px;border:1px solid #e0d5c8;border-radius:8px;background:#faf8f5;color:#6b5d52;cursor:pointer;transition:all .25s}
-.pill:hover{border-color:#c9a96e;color:#9a7a4a}
-.pill.active{border-color:#c9a96e;background:rgba(201,169,110,.1);color:#9a7a4a;font-weight:400}
-.phase-pills{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.phase-pill{font-family:'Sarabun',sans-serif;padding:16px;border:1px solid #e0d5c8;border-radius:10px;background:#faf8f5;cursor:pointer;transition:all .25s;text-align:left}
-.phase-pill:hover,.phase-pill.active{border-color:#c9a96e}
-.phase-pill.active{background:rgba(201,169,110,.08)}
-.phase-name{font-size:13px;font-weight:500;color:#1a1612;margin-bottom:3px}
-.phase-price{font-size:11px;color:#9a7a4a}
-.pay-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.pay-card{padding:16px;border:1px solid #e0d5c8;border-radius:10px;background:#faf8f5;cursor:pointer;transition:all .25s;text-align:left}
-.pay-card:hover,.pay-card.active{border-color:#c9a96e}
-.pay-card.active{background:rgba(201,169,110,.08)}
-.pay-title{font-size:13px;font-weight:500;color:#1a1612;margin-bottom:4px}
-.pay-detail{font-size:11px;color:#9a7a4a;line-height:1.6}
-.bank-box{background:#f8f4ef;border:1px solid #e8d5b0;border-radius:12px;padding:20px;margin-top:16px}
-.bank-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.bank-icon{width:40px;height:40px;border-radius:50%;background:#1a56a0;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.bank-name{font-size:14px;font-weight:500;color:#1a1612}
-.bank-branch{font-size:11px;color:#9a7a4a;margin-top:2px}
-.bank-rows{border-top:1px solid #e8d5b0;padding-top:14px;display:grid;gap:8px}
-.bank-row{display:flex;justify-content:space-between;align-items:center;font-size:13px}
-.bank-row-lbl{color:#6b5d52}
-.bank-row-val{font-weight:500;color:#1a1612;letter-spacing:.04em}
-.bank-copy{background:transparent;border:1px solid #c9a96e;color:#9a7a4a;border-radius:6px;padding:3px 10px;font-size:11px;cursor:pointer;font-family:'Sarabun',sans-serif;transition:all .2s}
-.bank-copy:hover{background:#c9a96e;color:#fff}
-.bank-copy.copied{background:#5a8a72;border-color:#5a8a72;color:#fff}
-.line-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:#06c755;border-radius:10px;padding:12px 20px;margin-top:14px;text-decoration:none;transition:opacity .2s}
-.line-btn:hover{opacity:.9}
-.line-btn span{font-size:14px;font-weight:500;color:#fff;font-family:'Sarabun',sans-serif}
-.divider{height:1px;background:#f0e8de;margin:28px 0}
-.submit-btn{width:100%;padding:16px;background:#c9a96e;color:#1a1612;border:none;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .4s;margin-top:8px}
-.submit-btn:hover{background:#9a7a4a;color:#fff;transform:translateY(-1px)}
-.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.success-screen{display:none;text-align:center;padding:48px 32px}
-.success-icon{width:64px;height:64px;border-radius:50%;background:rgba(90,138,114,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
-.success-title{font-family:'Playfair Display',serif;font-size:24px;color:#1a1612;margin-bottom:8px}
-.success-sub{font-size:14px;color:#6b5d52;line-height:1.8}
-.card-footer{background:#f8f4ef;border-top:1px solid #e8d5b0;padding:16px 32px;text-align:center}
-.card-footer p{font-size:11px;color:#b8a898;letter-spacing:.1em}
-.req{color:#c9a96e;margin-left:2px}
-#errMsg{display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:12px 16px;font-size:13px;color:#991b1b;margin-bottom:16px}
-@media(max-width:480px){
-  body{padding:20px 12px 60px}
-  .card-header,.card-body{padding:24px 20px}
-  .pay-cards,.phase-pills{grid-template-columns:1fr}
-  .card-footer{padding:14px 20px}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MigiJames — เริ่มต้นโปรเจกต์</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Sarabun:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html {
+      scroll-behavior: smooth
+    }
+
+    body {
+      background: #f5ede0;
+      font-family: 'Sarabun', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      padding: 40px 16px 80px
+    }
+
+    .card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 40px rgba(0, 0, 0, .10)
+    }
+
+    .card-header {
+      background: #1a1612;
+      padding: 36px 32px 28px;
+      text-align: center;
+      position: relative
+    }
+
+    .card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, transparent, #c9a96e, transparent)
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: #fff;
+      font-weight: 400;
+      letter-spacing: .04em;
+      margin-bottom: 6px
+    }
+
+    .logo em {
+      color: #c9a96e;
+      font-style: normal
+    }
+
+    .logo-sub {
+      font-size: 9px;
+      letter-spacing: .4em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .3);
+      margin-bottom: 16px
+    }
+
+    .header-badge {
+      display: inline-block;
+      background: rgba(201, 169, 110, .15);
+      border: 1px solid rgba(201, 169, 110, .3);
+      color: #c9a96e;
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 20px
+    }
+
+    .card-body {
+      padding: 32px
+    }
+
+    .section-title {
+      font-size: 10px;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: #c9a96e;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .section-title::before {
+      content: '';
+      width: 20px;
+      height: 1px;
+      background: #c9a96e
+    }
+
+    .field {
+      margin-bottom: 24px
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: #6b5d52;
+      margin-bottom: 8px;
+      font-weight: 400
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #e0d5c8;
+      border-radius: 8px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 14px;
+      color: #1a1612;
+      background: #faf8f5;
+      outline: none;
+      transition: border-color .3s, box-shadow .3s;
+      resize: vertical
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: #c9a96e;
+      box-shadow: 0 0 0 3px rgba(201, 169, 110, .12);
+      background: #fff
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #b8a898
+    }
+
+    .pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px
+    }
+
+    .pill {
+      font-family: 'Sarabun', sans-serif;
+      font-size: 12px;
+      letter-spacing: .1em;
+      padding: 9px 18px;
+      border: 1px solid #e0d5c8;
+      border-radius: 8px;
+      background: #faf8f5;
+      color: #6b5d52;
+      cursor: pointer;
+      transition: all .25s
+    }
+
+    .pill:hover {
+      border-color: #c9a96e;
+      color: #9a7a4a
+    }
+
+    .pill.active {
+      border-color: #c9a96e;
+      background: rgba(201, 169, 110, .1);
+      color: #9a7a4a;
+      font-weight: 400
+    }
+
+    .phase-pills {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px
+    }
+
+    .phase-pill {
+      font-family: 'Sarabun', sans-serif;
+      padding: 16px;
+      border: 1px solid #e0d5c8;
+      border-radius: 10px;
+      background: #faf8f5;
+      cursor: pointer;
+      transition: all .25s;
+      text-align: left
+    }
+
+    .phase-pill:hover,
+    .phase-pill.active {
+      border-color: #c9a96e
+    }
+
+    .phase-pill.active {
+      background: rgba(201, 169, 110, .08)
+    }
+
+    .phase-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1a1612;
+      margin-bottom: 3px
+    }
+
+    .phase-price {
+      font-size: 11px;
+      color: #9a7a4a
+    }
+
+    .pay-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .pay-card {
+      padding: 16px;
+      border: 1px solid #e0d5c8;
+      border-radius: 10px;
+      background: #faf8f5;
+      cursor: pointer;
+      transition: all .25s;
+      text-align: left
+    }
+
+    .pay-card:hover,
+    .pay-card.active {
+      border-color: #c9a96e
+    }
+
+    .pay-card.active {
+      background: rgba(201, 169, 110, .08)
+    }
+
+    .pay-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: #1a1612;
+      margin-bottom: 4px
+    }
+
+    .pay-detail {
+      font-size: 11px;
+      color: #9a7a4a;
+      line-height: 1.6
+    }
+
+    .bank-box {
+      background: #f8f4ef;
+      border: 1px solid #e8d5b0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 16px
+    }
+
+    .bank-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px
+    }
+
+    .bank-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #1a56a0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .bank-name {
+      font-size: 14px;
+      font-weight: 500;
+      color: #1a1612
+    }
+
+    .bank-branch {
+      font-size: 11px;
+      color: #9a7a4a;
+      margin-top: 2px
+    }
+
+    .bank-rows {
+      border-top: 1px solid #e8d5b0;
+      padding-top: 14px;
+      display: grid;
+      gap: 8px
+    }
+
+    .bank-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px
+    }
+
+    .bank-row-lbl {
+      color: #6b5d52
+    }
+
+    .bank-row-val {
+      font-weight: 500;
+      color: #1a1612;
+      letter-spacing: .04em
+    }
+
+    .bank-copy {
+      background: transparent;
+      border: 1px solid #c9a96e;
+      color: #9a7a4a;
+      border-radius: 6px;
+      padding: 3px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'Sarabun', sans-serif;
+      transition: all .2s
+    }
+
+    .bank-copy:hover {
+      background: #c9a96e;
+      color: #fff
+    }
+
+    .bank-copy.copied {
+      background: #5a8a72;
+      border-color: #5a8a72;
+      color: #fff
+    }
+
+    .line-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #06c755;
+      border-radius: 10px;
+      padding: 12px 20px;
+      margin-top: 14px;
+      text-decoration: none;
+      transition: opacity .2s
+    }
+
+    .line-btn:hover {
+      opacity: .9
+    }
+
+    .line-btn span {
+      font-size: 14px;
+      font-weight: 500;
+      color: #fff;
+      font-family: 'Sarabun', sans-serif
+    }
+
+    .divider {
+      height: 1px;
+      background: #f0e8de;
+      margin: 28px 0
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #c9a96e;
+      color: #1a1612;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all .4s;
+      margin-top: 8px
+    }
+
+    .submit-btn:hover {
+      background: #9a7a4a;
+      color: #fff;
+      transform: translateY(-1px)
+    }
+
+    .submit-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none
+    }
+
+    .success-screen {
+      display: none;
+      text-align: center;
+      padding: 48px 32px
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(90, 138, 114, .15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px
+    }
+
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: #1a1612;
+      margin-bottom: 8px
+    }
+
+    .success-sub {
+      font-size: 14px;
+      color: #6b5d52;
+      line-height: 1.8
+    }
+
+    .card-footer {
+      background: #f8f4ef;
+      border-top: 1px solid #e8d5b0;
+      padding: 16px 32px;
+      text-align: center
+    }
+
+    .card-footer p {
+      font-size: 11px;
+      color: #b8a898;
+      letter-spacing: .1em
+    }
+
+    .req {
+      color: #c9a96e;
+      margin-left: 2px
+    }
+
+    #errMsg {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #991b1b;
+      margin-bottom: 16px
+    }
+
+    @media(max-width:480px) {
+      body {
+        padding: 20px 12px 60px
+      }
+
+      .card-header,
+      .card-body {
+        padding: 24px 20px
+      }
+
+      .pay-cards,
+      .phase-pills {
+        grid-template-columns: 1fr
+      }
+
+      .card-footer {
+        padding: 14px 20px
+      }
+    }
+  </style>
 </head>
+
 <body>
-<div class="card">
+  <div class="card">
 
-  <div class="card-header">
-    <div class="logo"><em>Migi</em>James</div>
-    <div class="logo-sub">Jewelry Story Telling</div>
-    <div class="header-badge">✦ &nbsp; แบบฟอร์มเริ่มต้นโปรเจกต์ &nbsp; ✦</div>
-  </div>
-
-  <div class="card-body" id="formBody">
-
-    <div class="section-title">ข้อมูลส่วนตัว</div>
-
-    <div class="field">
-      <label>ชื่อ-นามสกุล <span class="req">*</span></label>
-      <input type="text" id="ownerName" placeholder="ชื่อ-นามสกุล เจ้าของ/ผู้ติดต่อหลัก"/>
+    <div class="card-header">
+      <div class="logo"><em>Migi</em>James</div>
+      <div class="logo-sub">Jewelry Story Telling</div>
+      <div class="header-badge">✦ &nbsp; แบบฟอร์มเริ่มต้นโปรเจกต์ &nbsp; ✦</div>
     </div>
 
-    <div class="field">
-      <label>Gmail <span class="req">*</span></label>
-      <input type="email" id="gmail" placeholder="example@gmail.com"/>
-      <div style="font-size:11px;color:#b8a898;margin-top:6px">ใช้สมัคร Supabase · Cloudflare · GitHub · Vercel</div>
-    </div>
+    <div class="card-body" id="formBody">
 
-    <div class="field">
-      <label>ช่องทางติดต่อ <span class="req">*</span></label>
-      <div class="pills" id="contactChannel">
-        <button type="button" class="pill" data-val="LINE" onclick="selectPill(this,'contactChannel')">LINE</button>
-        <button type="button" class="pill" data-val="WhatsApp" onclick="selectPill(this,'contactChannel')">WhatsApp</button>
-        <button type="button" class="pill" data-val="โทรศัพท์" onclick="selectPill(this,'contactChannel')">โทรศัพท์</button>
-        <button type="button" class="pill" data-val="Facebook" onclick="selectPill(this,'contactChannel')">Facebook</button>
+      <div class="section-title">ข้อมูลส่วนตัว</div>
+
+      <div class="field">
+        <label>ชื่อ-นามสกุล <span class="req">*</span></label>
+        <input type="text" id="ownerName" placeholder="ชื่อ-นามสกุล เจ้าของ/ผู้ติดต่อหลัก" />
       </div>
-      <input type="text" id="contactInfo" placeholder="เบอร์โทร / LINE ID / Facebook ชื่อ" style="margin-top:10px"/>
-    </div>
 
-    <div class="divider"></div>
-    <div class="section-title">โดเมนเนม</div>
-
-    <div class="field">
-      <label>ชื่อโดเมนที่ต้องการ <span class="req">*</span></label>
-      <input type="text" id="domainName" placeholder="เช่น migijames (ไม่ต้องใส่ .com)"/>
-    </div>
-
-    <div class="field">
-      <label>ประเภทโดเมน</label>
-      <div class="pills" id="domainExt">
-        <button type="button" class="pill active" data-val=".com" onclick="selectPill(this,'domainExt')">.com</button>
-        <button type="button" class="pill" data-val=".co.th" onclick="selectPill(this,'domainExt')">.co.th</button>
-        <button type="button" class="pill" data-val=".th" onclick="selectPill(this,'domainExt')">.th</button>
-        <button type="button" class="pill" data-val="ยังไม่แน่ใจ" onclick="selectPill(this,'domainExt')">ยังไม่แน่ใจ</button>
+      <div class="field">
+        <label>Gmail <span class="req">*</span></label>
+        <input type="email" id="gmail" placeholder="example@gmail.com" />
+        <div style="font-size:11px;color:#b8a898;margin-top:6px">ใช้สมัคร Supabase · Cloudflare · GitHub · Vercel</div>
       </div>
-    </div>
 
-    <div class="divider"></div>
-    <div class="section-title">แพ็กเกจที่เลือก</div>
-
-    <div class="field">
-      <label>เลือก Phase <span class="req">*</span></label>
-      <div class="phase-pills" id="startPhase">
-        <button type="button" class="phase-pill" data-val="Phase 1 — Brand Presence ฿25,000" onclick="selectCard(this,'startPhase')">
-          <div class="phase-name">Phase 1</div>
-          <div class="phase-price">Brand Presence · ฿25,000</div>
-        </button>
-        <button type="button" class="phase-pill" data-val="Phase 1+2 — Brand + CRM ฿60,000" onclick="selectCard(this,'startPhase')">
-          <div class="phase-name">Phase 1+2</div>
-          <div class="phase-price">Brand + CRM · ฿60,000</div>
-        </button>
-        <button type="button" class="phase-pill" data-val="ครบ 3 Phase ฿100,000" onclick="selectCard(this,'startPhase')">
-          <div class="phase-name">ครบ 3 Phase</div>
-          <div class="phase-price">Full System · ฿100,000</div>
-        </button>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-    <div class="section-title">การชำระเงิน</div>
-
-    <div class="field">
-      <label>รูปแบบการชำระ <span class="req">*</span></label>
-      <div class="pay-cards" id="paymentMethod">
-        <button type="button" class="pay-card" data-val="โอนเต็มจำนวน (ลด 5%) Phase 1 = ฿23,750" onclick="selectCard(this,'paymentMethod')">
-          <div class="pay-title">โอนเต็มจำนวน</div>
-          <div class="pay-detail">ลด 5% ทันที<br>Phase 1 = ฿23,750</div>
-        </button>
-        <button type="button" class="pay-card" data-val="แบ่ง 50/50 — Phase 1 = ฿12,500 × 2" onclick="selectCard(this,'paymentMethod')">
-          <div class="pay-title">แบ่ง 50/50</div>
-          <div class="pay-detail">50% เริ่มงาน<br>50% ส่งมอบ</div>
-        </button>
-      </div>
-    </div>
-
-    <!-- Bank -->
-    <div class="bank-box">
-      <div class="bank-header">
-        <div class="bank-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8">
-            <rect x="3" y="9" width="18" height="12" rx="2"/><path d="M3 9l9-6 9 6"/><line x1="12" y1="9" x2="12" y2="21"/>
-          </svg>
+      <div class="field">
+        <label>ช่องทางติดต่อ <span class="req">*</span></label>
+        <div class="pills" id="contactChannel">
+          <button type="button" class="pill" data-val="LINE" onclick="selectPill(this,'contactChannel')">LINE</button>
+          <button type="button" class="pill" data-val="WhatsApp"
+            onclick="selectPill(this,'contactChannel')">WhatsApp</button>
+          <button type="button" class="pill" data-val="โทรศัพท์"
+            onclick="selectPill(this,'contactChannel')">โทรศัพท์</button>
+          <button type="button" class="pill" data-val="Facebook"
+            onclick="selectPill(this,'contactChannel')">Facebook</button>
         </div>
-        <div>
-          <div class="bank-name">ธนาคารกรุงเทพ — ออมทรัพย์</div>
-          <div class="bank-branch">สาขาถนนอโศกมนตรี</div>
+        <input type="text" id="contactInfo" placeholder="เบอร์โทร / LINE ID / Facebook ชื่อ" style="margin-top:10px" />
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-title">โดเมนเนม</div>
+
+      <div class="field">
+        <label>ชื่อโดเมนที่ต้องการ <span class="req">*</span></label>
+        <input type="text" id="domainName" placeholder="เช่น migijames (ไม่ต้องใส่ .com)" />
+      </div>
+
+      <div class="field">
+        <label>ประเภทโดเมน</label>
+        <div class="pills" id="domainExt">
+          <button type="button" class="pill active" data-val=".com" onclick="selectPill(this,'domainExt')">.com</button>
+          <button type="button" class="pill" data-val=".co.th" onclick="selectPill(this,'domainExt')">.co.th</button>
+          <button type="button" class="pill" data-val=".th" onclick="selectPill(this,'domainExt')">.th</button>
+          <button type="button" class="pill" data-val="ยังไม่แน่ใจ"
+            onclick="selectPill(this,'domainExt')">ยังไม่แน่ใจ</button>
         </div>
       </div>
-      <div class="bank-rows">
-        <div class="bank-row">
-          <span class="bank-row-lbl">เลขบัญชี</span>
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="bank-row-val">925-013747-9</span>
-            <button class="bank-copy" id="copyBtn" onclick="copyAcc()">copy</button>
+
+      <div class="divider"></div>
+      <div class="section-title">แพ็กเกจที่เลือก</div>
+
+      <div class="field">
+        <label>เลือก Phase <span class="req">*</span></label>
+        <div class="phase-pills" id="startPhase">
+          <button type="button" class="phase-pill" data-val="Phase 1 — Brand Presence ฿25,000"
+            onclick="selectCard(this,'startPhase')">
+            <div class="phase-name">Phase 1</div>
+            <div class="phase-price">Brand Presence · ฿25,000</div>
+          </button>
+          <button type="button" class="phase-pill" data-val="Phase 1+2 — Brand + CRM ฿60,000"
+            onclick="selectCard(this,'startPhase')">
+            <div class="phase-name">Phase 1+2</div>
+            <div class="phase-price">Brand + CRM · ฿60,000</div>
+          </button>
+          <button type="button" class="phase-pill" data-val="ครบ 3 Phase ฿100,000"
+            onclick="selectCard(this,'startPhase')">
+            <div class="phase-name">ครบ 3 Phase</div>
+            <div class="phase-price">Full System · ฿100,000</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-title">การชำระเงิน</div>
+
+      <div class="field">
+        <label>รูปแบบการชำระ <span class="req">*</span></label>
+        <div class="pay-cards" id="paymentMethod">
+          <button type="button" class="pay-card" data-val="โอนเต็มจำนวน (ลด 5%) Phase 1 = ฿23,750"
+            onclick="selectCard(this,'paymentMethod')">
+            <div class="pay-title">โอนเต็มจำนวน</div>
+            <div class="pay-detail">ลด 5% ทันที<br>Phase 1 = ฿23,750</div>
+          </button>
+          <button type="button" class="pay-card" data-val="แบ่ง 50/50 — Phase 1 = ฿12,500 × 2"
+            onclick="selectCard(this,'paymentMethod')">
+            <div class="pay-title">แบ่ง 50/50</div>
+            <div class="pay-detail">50% เริ่มงาน<br>50% ส่งมอบ</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bank -->
+      <div class="bank-box">
+        <div class="bank-header">
+          <div class="bank-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8">
+              <rect x="3" y="9" width="18" height="12" rx="2" />
+              <path d="M3 9l9-6 9 6" />
+              <line x1="12" y1="9" x2="12" y2="21" />
+            </svg>
+          </div>
+          <div>
+            <div class="bank-name">ธนาคารกรุงเทพ — ออมทรัพย์</div>
+            <div class="bank-branch">สาขาถนนอโศกมนตรี</div>
           </div>
         </div>
-        <div class="bank-row">
-          <span class="bank-row-lbl">ชื่อบัญชี</span>
-          <span class="bank-row-val">นายอนุสรณ์ หนองนา</span>
+        <div class="bank-rows">
+          <div class="bank-row">
+            <span class="bank-row-lbl">เลขบัญชี</span>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="bank-row-val">925-013747-9</span>
+              <button class="bank-copy" id="copyBtn" onclick="copyAcc()">copy</button>
+            </div>
+          </div>
+          <div class="bank-row">
+            <span class="bank-row-lbl">ชื่อบัญชี</span>
+            <span class="bank-row-val">นายอนุสรณ์ หนองนา</span>
+          </div>
+        </div>
+        <a class="line-btn" href="https://lin.ee/X9Ch25o" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path
+              d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
+          </svg>
+          <span>ส่งสลิปมาที่ LINE @denmasterfa</span>
+        </a>
+      </div>
+
+      <div class="divider"></div>
+      <div class="section-title">ข้อมูลเพิ่มเติม</div>
+
+      <div class="field">
+        <label>มี Logo / สีประจำร้านแล้วหรือยัง?</label>
+        <div class="pills" id="hasBranding">
+          <button type="button" class="pill" data-val="มี Logo แล้ว" onclick="selectPill(this,'hasBranding')">มี Logo
+            แล้ว</button>
+          <button type="button" class="pill" data-val="มีบางส่วน"
+            onclick="selectPill(this,'hasBranding')">มีบางส่วน</button>
+          <button type="button" class="pill" data-val="ยังไม่มี"
+            onclick="selectPill(this,'hasBranding')">ยังไม่มี</button>
         </div>
       </div>
-      <a class="line-btn" href="https://lin.ee/X9Ch25o" target="_blank">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-        <span>ส่งสลิปมาที่ LINE @denmasterfa</span>
-      </a>
+
+      <div class="field">
+        <label>ต้องการเริ่มพัฒนาเมื่อไหร่?</label>
+        <div class="pills" id="startDate">
+          <button type="button" class="pill" data-val="ทันที" onclick="selectPill(this,'startDate')">ทันที</button>
+          <button type="button" class="pill" data-val="สัปดาห์หน้า"
+            onclick="selectPill(this,'startDate')">สัปดาห์หน้า</button>
+          <button type="button" class="pill" data-val="ต้นเดือนหน้า"
+            onclick="selectPill(this,'startDate')">ต้นเดือนหน้า</button>
+          <button type="button" class="pill" data-val="ยืดหยุ่น"
+            onclick="selectPill(this,'startDate')">ยืดหยุ่น</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>ข้อมูลหรือความต้องการพิเศษเพิ่มเติม</label>
+        <textarea id="notes" rows="3" placeholder="เช่น มีรูปสินค้าพร้อม, ต้องการระบบจองด่วน, อื่นๆ"></textarea>
+      </div>
+
+      <div id="errMsg"></div>
+      <button class="submit-btn" id="submitBtn" onclick="submitForm()">
+        ✦ &nbsp; ส่งข้อมูลเริ่มต้นโปรเจกต์
+      </button>
+
     </div>
 
-    <div class="divider"></div>
-    <div class="section-title">ข้อมูลเพิ่มเติม</div>
-
-    <div class="field">
-      <label>มี Logo / สีประจำร้านแล้วหรือยัง?</label>
-      <div class="pills" id="hasBranding">
-        <button type="button" class="pill" data-val="มี Logo แล้ว" onclick="selectPill(this,'hasBranding')">มี Logo แล้ว</button>
-        <button type="button" class="pill" data-val="มีบางส่วน" onclick="selectPill(this,'hasBranding')">มีบางส่วน</button>
-        <button type="button" class="pill" data-val="ยังไม่มี" onclick="selectPill(this,'hasBranding')">ยังไม่มี</button>
+    <!-- Success -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5a8a72" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      </div>
+      <h2 class="success-title">ขอบคุณมากครับ! 🔮</h2>
+      <p class="success-sub" id="successMsg"></p>
+      <div style="margin-top:28px">
+        <a class="line-btn" href="https://lin.ee/X9Ch25o" target="_blank"
+          style="max-width:280px;margin:0 auto;border-radius:10px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path
+              d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314" />
+          </svg>
+          <span>ส่งสลิปมาที่ LINE @denmasterfa</span>
+        </a>
       </div>
     </div>
 
-    <div class="field">
-      <label>ต้องการเริ่มพัฒนาเมื่อไหร่?</label>
-      <div class="pills" id="startDate">
-        <button type="button" class="pill" data-val="ทันที" onclick="selectPill(this,'startDate')">ทันที</button>
-        <button type="button" class="pill" data-val="สัปดาห์หน้า" onclick="selectPill(this,'startDate')">สัปดาห์หน้า</button>
-        <button type="button" class="pill" data-val="ต้นเดือนหน้า" onclick="selectPill(this,'startDate')">ต้นเดือนหน้า</button>
-        <button type="button" class="pill" data-val="ยืดหยุ่น" onclick="selectPill(this,'startDate')">ยืดหยุ่น</button>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>ข้อมูลหรือความต้องการพิเศษเพิ่มเติม</label>
-      <textarea id="notes" rows="3" placeholder="เช่น มีรูปสินค้าพร้อม, ต้องการระบบจองด่วน, อื่นๆ"></textarea>
-    </div>
-
-    <div id="errMsg"></div>
-    <button class="submit-btn" id="submitBtn" onclick="submitForm()">
-      ✦ &nbsp; ส่งข้อมูลเริ่มต้นโปรเจกต์
-    </button>
-
-  </div>
-
-  <!-- Success -->
-  <div class="success-screen" id="successScreen">
-    <div class="success-icon">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5a8a72" stroke-width="2.5">
-        <polyline points="20 6 9 17 4 12"/>
-      </svg>
-    </div>
-    <h2 class="success-title">ขอบคุณมากครับ! 🔮</h2>
-    <p class="success-sub" id="successMsg"></p>
-    <div style="margin-top:28px">
-      <a class="line-btn" href="https://lin.ee/X9Ch25o" target="_blank" style="max-width:280px;margin:0 auto;border-radius:10px">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-        <span>ส่งสลิปมาที่ LINE @denmasterfa</span>
-      </a>
+    <div class="card-footer">
+      <p>ครูเด่น มาสเตอร์ฟา · CAP Vision Institute · capvisionpartner.com</p>
     </div>
   </div>
 
-  <div class="card-footer">
-    <p>ครูเด่น มาสเตอร์ฟา · CAP Vision Institute · capvisionpartner.com</p>
-  </div>
-</div>
+  <script>
+    // ── Worker URL — เปลี่ยนหลัง deploy Worker ──────────────────
+    // ตัวอย่าง: https://migijames-line-proxy.dencapvision.workers.dev
+    const WORKER_URL = 'https://migijames-line-proxy.YOUR_SUBDOMAIN.workers.dev'
 
-<script>
-// ── Worker URL — เปลี่ยนหลัง deploy Worker ──────────────────
-// ตัวอย่าง: https://migijames-line-proxy.YOUR_SUBDOMAIN.workers.dev
-const WORKER_URL = 'https://migijames-line-proxy.YOUR_SUBDOMAIN.workers.dev'
+    const state = {
+      contactChannel: '', domainExt: '.com',
+      startPhase: '', paymentMethod: '',
+      hasBranding: '', startDate: '',
+    }
 
-const state = {
-  contactChannel:'', domainExt:'.com',
-  startPhase:'', paymentMethod:'',
-  hasBranding:'', startDate:'',
-}
+    function selectPill(btn, group) {
+      document.querySelectorAll(`#${group} .pill`).forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      state[group] = btn.dataset.val
+    }
+    function selectCard(btn, group) {
+      document.querySelectorAll(`#${group} button`).forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      state[group] = btn.dataset.val
+    }
+    function copyAcc() {
+      navigator.clipboard.writeText('9250137479').then(() => {
+        const btn = document.getElementById('copyBtn')
+        btn.textContent = 'copied!'
+        btn.classList.add('copied')
+        setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied') }, 2000)
+      })
+    }
+    function showErr(msg) {
+      const el = document.getElementById('errMsg')
+      el.textContent = msg; el.style.display = 'block'
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+    function hideErr() { document.getElementById('errMsg').style.display = 'none' }
 
-function selectPill(btn, group) {
-  document.querySelectorAll(`#${group} .pill`).forEach(b => b.classList.remove('active'))
-  btn.classList.add('active')
-  state[group] = btn.dataset.val
-}
-function selectCard(btn, group) {
-  document.querySelectorAll(`#${group} button`).forEach(b => b.classList.remove('active'))
-  btn.classList.add('active')
-  state[group] = btn.dataset.val
-}
-function copyAcc() {
-  navigator.clipboard.writeText('9250137479').then(() => {
-    const btn = document.getElementById('copyBtn')
-    btn.textContent = 'copied!'
-    btn.classList.add('copied')
-    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('copied') }, 2000)
-  })
-}
-function showErr(msg) {
-  const el = document.getElementById('errMsg')
-  el.textContent = msg; el.style.display = 'block'
-  el.scrollIntoView({ behavior:'smooth', block:'center' })
-}
-function hideErr() { document.getElementById('errMsg').style.display = 'none' }
+    async function submitForm() {
+      hideErr()
+      const name = document.getElementById('ownerName').value.trim()
+      const gmail = document.getElementById('gmail').value.trim()
+      const contact = document.getElementById('contactInfo').value.trim()
+      const domain = document.getElementById('domainName').value.trim()
 
-async function submitForm() {
-  hideErr()
-  const name    = document.getElementById('ownerName').value.trim()
-  const gmail   = document.getElementById('gmail').value.trim()
-  const contact = document.getElementById('contactInfo').value.trim()
-  const domain  = document.getElementById('domainName').value.trim()
+      if (!name) return showErr('กรุณากรอกชื่อ-นามสกุล')
+      if (!gmail || !gmail.includes('@')) return showErr('กรุณากรอก Gmail ให้ถูกต้อง')
+      if (!state.contactChannel) return showErr('กรุณาเลือกช่องทางติดต่อ')
+      if (!contact) return showErr('กรุณากรอกข้อมูลการติดต่อ')
+      if (!domain) return showErr('กรุณากรอกชื่อโดเมนที่ต้องการ')
+      if (!state.startPhase) return showErr('กรุณาเลือก Phase ที่ต้องการ')
+      if (!state.paymentMethod) return showErr('กรุณาเลือกรูปแบบการชำระเงิน')
 
-  if (!name)                         return showErr('กรุณากรอกชื่อ-นามสกุล')
-  if (!gmail || !gmail.includes('@')) return showErr('กรุณากรอก Gmail ให้ถูกต้อง')
-  if (!state.contactChannel)         return showErr('กรุณาเลือกช่องทางติดต่อ')
-  if (!contact)                      return showErr('กรุณากรอกข้อมูลการติดต่อ')
-  if (!domain)                       return showErr('กรุณากรอกชื่อโดเมนที่ต้องการ')
-  if (!state.startPhase)             return showErr('กรุณาเลือก Phase ที่ต้องการ')
-  if (!state.paymentMethod)          return showErr('กรุณาเลือกรูปแบบการชำระเงิน')
+      const btn = document.getElementById('submitBtn')
+      btn.disabled = true
+      btn.textContent = '⏳ กำลังส่งข้อมูล...'
 
-  const btn = document.getElementById('submitBtn')
-  btn.disabled = true
-  btn.textContent = '⏳ กำลังส่งข้อมูล...'
+      const payload = {
+        name, gmail, contact,
+        channel: state.contactChannel,
+        domain: `${domain}${state.domainExt}`,
+        phase: state.startPhase,
+        payment: state.paymentMethod,
+        branding: state.hasBranding,
+        startDate: state.startDate,
+        notes: document.getElementById('notes').value.trim(),
+      }
 
-  const payload = {
-    name, gmail, contact,
-    channel:   state.contactChannel,
-    domain:    `${domain}${state.domainExt}`,
-    phase:     state.startPhase,
-    payment:   state.paymentMethod,
-    branding:  state.hasBranding,
-    startDate: state.startDate,
-    notes:     document.getElementById('notes').value.trim(),
-  }
+      try {
+        // ส่งไป Cloudflare Worker — Token ซ่อนอยู่ที่ Worker ปลอดภัย 100%
+        await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        })
+      } catch (e) {
+        console.error(e)
+      }
 
-  try {
-    // ส่งไป Cloudflare Worker — Token ซ่อนอยู่ที่ Worker ปลอดภัย 100%
-    await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
-  } catch (e) {
-    console.error(e)
-  }
+      showSuccess(payload)
+      btn.disabled = false
+    }
 
-  showSuccess(payload)
-  btn.disabled = false
-}
-
-function showSuccess(d) {
-  document.getElementById('formBody').style.display = 'none'
-  document.getElementById('successScreen').style.display = 'block'
-  document.getElementById('successMsg').innerHTML =
-    `<strong>${d.name}</strong> ได้รับข้อมูลแล้วครับ<br><br>` +
-    `📦 ${d.phase}<br>🌐 ${d.domain}<br>💳 ${d.payment}<br><br>` +
-    `ครูเด่นจะติดต่อกลับทาง <strong>${d.channel}: ${d.contact}</strong> ภายใน 24 ชั่วโมงครับ 🔮`
-}
-</script>
+    function showSuccess(d) {
+      document.getElementById('formBody').style.display = 'none'
+      document.getElementById('successScreen').style.display = 'block'
+      document.getElementById('successMsg').innerHTML =
+        `<strong>${d.name}</strong> ได้รับข้อมูลแล้วครับ<br><br>` +
+        `📦 ${d.phase}<br>🌐 ${d.domain}<br>💳 ${d.payment}<br><br>` +
+        `ครูเด่นจะติดต่อกลับทาง <strong>${d.channel}: ${d.contact}</strong> ภายใน 24 ชั่วโมงครับ 🔮`
+    }
+  </script>
 </body>
+
 </html>
