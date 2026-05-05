@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MigiJames — Jewelry Story Telling · Web App Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Sarabun:wght@200;300;400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ══ DESIGN TOKENS ══════════════════════════════════════════ */
+:root{
+  --obsidian:#080604;
+  --charcoal:#1a1612;
+  --warm:#2d2420;
+  --gold:#c9a96e;
+  --gold-light:#e8d5b0;
+  --gold-bright:#d4af37;
+  --gold-dark:#9a7a4a;
+  --cream:#faf6f0;
+  --ivory:#f5ede0;
+  --mist:#b8a898;
+  --stone:#6b5d52;
+  --amethyst:#9b7fa6;
+  --emerald:#5a8a72;
+  --ruby:#b84a4a;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--obsidian);
+  color:var(--cream);
+  font-family:'Sarabun',sans-serif;
+  font-weight:300;
+  overflow-x:hidden;
+  cursor:default;
+}
+::-webkit-scrollbar{width:2px}
+::-webkit-scrollbar-track{background:var(--obsidian)}
+::-webkit-scrollbar-thumb{background:var(--gold)}
+::selection{background:rgba(201,169,110,.2);color:var(--cream)}
+
+/* ══ NAV ════════════════════════════════════════════════════ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:22px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:all .6s;
+}
+nav.solid{
+  background:rgba(8,6,4,.9);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid rgba(201,169,110,.08);
+  padding:16px 48px;
+}
+.logo{text-decoration:none}
+.logo-main{
+  font-family:'Playfair Display',serif;
+  font-size:24px;letter-spacing:.04em;
+  color:#fff;font-weight:400;display:block;
+}
+.logo-main em{color:var(--gold);font-style:normal}
+.logo-sub{
+  font-size:8px;letter-spacing:.45em;
+  color:rgba(255,255,255,.25);text-transform:uppercase;
+  margin-top:2px;display:block;
+}
+.nav-links{
+  display:flex;gap:36px;list-style:none;
+  align-items:center;
+}
+.nav-links a{
+  font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:rgba(255,255,255,.35);text-decoration:none;
+  transition:color .3s;
+}
+.nav-links a:hover{color:var(--gold)}
+.nav-cta{
+  font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  background:var(--gold);color:var(--obsidian);
+  border:none;padding:11px 24px;cursor:pointer;
+  font-family:'Sarabun',sans-serif;font-weight:400;
+  transition:all .4s;
+}
+.nav-cta:hover{background:var(--gold-dark);color:#fff}
+
+/* Demo bar */
+.demo-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:rgba(8,6,4,.95);
+  backdrop-filter:blur(20px);
+  border-top:1px solid rgba(201,169,110,.1);
+  padding:12px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.demo-bar-left{
+  font-size:9px;letter-spacing:.2em;
+  color:rgba(255,255,255,.3);
+}
+.demo-bar-left strong{color:var(--gold)}
+.demo-tabs{display:flex;gap:4px}
+.demo-tab{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  border:1px solid rgba(255,255,255,.1);
+  background:transparent;color:rgba(255,255,255,.3);
+  padding:6px 14px;cursor:pointer;
+  font-family:'Sarabun',sans-serif;
+  transition:all .3s;
+}
+.demo-tab:hover,.demo-tab.active{
+  border-color:var(--gold);color:var(--gold);
+}
+
+/* ══ HERO ════════════════════════════════════════════════════ */
+#hero{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:var(--obsidian);
+}
+.hero-atmos{position:absolute;inset:0;pointer-events:none}
+.hero-atmos::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 65% 55% at 50% -5%,rgba(201,169,110,.14),transparent),
+    radial-gradient(ellipse 35% 45% at 15% 65%,rgba(155,127,166,.06),transparent),
+    radial-gradient(ellipse 28% 38% at 85% 55%,rgba(90,138,114,.05),transparent);
+}
+/* Diamond wireframe */
+.diamond-bg{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  opacity:.032;
+}
+.diamond-bg svg{width:700px;height:700px}
+/* Dot grid */
+.dot-grid{
+  position:absolute;inset:0;opacity:.025;
+  background-image:radial-gradient(circle,var(--gold) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+/* Particles */
+.p{
+  position:absolute;width:2px;height:2px;
+  background:var(--gold);border-radius:0;
+  transform:rotate(45deg);
+  animation:rise linear infinite;
+  opacity:0;
+}
+@keyframes rise{
+  0%{transform:rotate(45deg) translateY(0);opacity:0}
+  10%{opacity:.35}
+  85%{opacity:.1}
+  100%{transform:rotate(45deg) translateY(-100vh);opacity:0}
+}
+.hero-body{
+  position:relative;z-index:1;
+  text-align:center;
+  padding:0 24px;
+  opacity:0;animation:fadeUp 1.4s ease .2s forwards;
+}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}from{opacity:0;transform:translateY(28px)}}
+.hero-eye{
+  font-size:8px;letter-spacing:.55em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:36px;
+  display:flex;align-items:center;justify-content:center;gap:16px;
+}
+.hero-eye::before,.hero-eye::after{
+  content:'';width:48px;height:1px;
+  background:linear-gradient(to right,transparent,var(--gold));
+}
+.hero-eye::after{
+  background:linear-gradient(to left,transparent,var(--gold));
+}
+.hero-name{
+  font-family:'Playfair Display',serif;
+  font-weight:400;line-height:.9;
+  letter-spacing:-.01em;
+  margin-bottom:8px;
+  font-size:clamp(60px,13vw,150px);
+  color:#fff;
+}
+.hero-name em{color:var(--gold);font-style:normal}
+.hero-tagline{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(16px,2.5vw,26px);
+  color:rgba(255,255,255,.3);
+  font-style:italic;font-weight:400;
+  letter-spacing:.04em;margin-bottom:48px;
+}
+.hero-desc{
+  font-size:12px;letter-spacing:.18em;
+  color:rgba(255,255,255,.28);
+  line-height:2.2;max-width:420px;margin:0 auto 52px;
+}
+.hero-btns{
+  display:flex;gap:14px;justify-content:center;flex-wrap:wrap;
+  margin-bottom:60px;
+}
+.btn-g{
+  font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+  background:var(--gold);color:var(--obsidian);
+  border:none;padding:16px 36px;cursor:pointer;
+  font-family:'Sarabun',sans-serif;
+  transition:all .5s;
+}
+.btn-g:hover{background:var(--gold-dark);color:#fff;transform:translateY(-2px)}
+.btn-o{
+  font-size:10px;letter-spacing:.28em;text-transform:uppercase;
+  background:transparent;color:rgba(255,255,255,.4);
+  border:1px solid rgba(255,255,255,.15);
+  padding:16px 36px;cursor:pointer;
+  font-family:'Sarabun',sans-serif;
+  transition:all .5s;
+}
+.btn-o:hover{border-color:var(--gold);color:var(--gold)}
+/* Stats row */
+.hero-stats{
+  display:flex;gap:40px;justify-content:center;flex-wrap:wrap;
+}
+.hero-stat{text-align:center}
+.hero-stat-n{
+  font-family:'Playfair Display',serif;
+  font-size:24px;color:var(--gold);font-weight:400;
+}
+.hero-stat-l{
+  font-size:8px;letter-spacing:.3em;text-transform:uppercase;
+  color:rgba(255,255,255,.2);margin-top:4px;
+}
+/* Scroll hint */
+.scroll-hint{
+  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:.3;
+}
+.scroll-hint span{font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:#fff}
+.scroll-hint-line{
+  width:1px;height:48px;
+  background:linear-gradient(to bottom,var(--gold),transparent);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{50%{opacity:.3}}
+
+/* ══ SECTION SHARED ════════════════════════════════════════ */
+.sec{padding:100px 48px;max-width:1120px;margin:0 auto}
+.sec-lbl{
+  font-size:8px;letter-spacing:.5em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;
+}
+.sec-lbl::before{content:'';width:24px;height:1px;background:var(--gold)}
+.sec-h{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(32px,5vw,58px);
+  color:#fff;font-weight:400;line-height:1.12;
+  margin-bottom:20px;
+}
+.sec-h em{color:var(--gold);font-style:italic}
+.sec-p{
+  font-size:13px;color:rgba(255,255,255,.38);
+  line-height:2;max-width:500px;font-weight:300;
+}
+/* Gold separator */
+.gold-sep{width:40px;height:1px;background:var(--gold);margin:32px 0}
+
+/* ══ STORY ══════════════════════════════════════════════════ */
+#story{background:var(--charcoal);padding:100px 0}
+.story-inner{
+  max-width:1120px;margin:0 auto;padding:0 48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+.story-quote{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(22px,3vw,34px);
+  font-style:italic;color:rgba(255,255,255,.85);
+  line-height:1.55;margin-bottom:28px;
+}
+.story-quote em{color:var(--gold);font-style:normal}
+.story-blocks{display:grid;grid-template-columns:1fr 1fr;gap:2px}
+.story-block{
+  background:rgba(255,255,255,.025);
+  padding:28px 24px;
+  border-bottom:2px solid transparent;
+  transition:border-color .4s;
+}
+.story-block:hover{border-bottom-color:var(--gold)}
+.story-block-icon{font-size:20px;margin-bottom:14px}
+.story-block-t{
+  font-family:'Playfair Display',serif;
+  font-size:16px;color:#fff;margin-bottom:8px;
+}
+.story-block-d{font-size:11px;color:rgba(255,255,255,.3);line-height:1.8}
+
+/* ══ COLLECTIONS ════════════════════════════════════════════ */
+#collections{background:var(--obsidian);padding:100px 0}
+.coll-tabs{
+  display:flex;gap:0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  max-width:1120px;margin:0 auto 0;padding:0 48px;
+  overflow-x:auto;
+}
+.coll-tab{
+  font-size:9px;letter-spacing:.25em;text-transform:uppercase;
+  padding:14px 24px;cursor:pointer;
+  border-bottom:2px solid transparent;
+  color:rgba(255,255,255,.28);
+  background:none;border-left:none;border-right:none;border-top:none;
+  font-family:'Sarabun',sans-serif;
+  transition:all .35s;white-space:nowrap;
+  margin-bottom:-1px;
+}
+.coll-tab.active,.coll-tab:hover{
+  color:var(--gold);border-bottom-color:var(--gold);
+}
+.coll-panel{display:none;max-width:1120px;margin:0 auto;padding:0 48px}
+.coll-panel.show{display:grid;grid-template-columns:1fr 1.4fr;min-height:480px}
+.coll-visual{
+  display:flex;align-items:center;justify-content:center;
+  padding:60px 40px;position:relative;overflow:hidden;
+}
+.gem-3d{
+  position:relative;
+  width:180px;height:180px;
+}
+.gem-outer{
+  position:absolute;inset:0;
+  border:1px solid rgba(255,255,255,.06);
+  transform:rotate(45deg);
+  transition:all 1s;
+}
+.gem-inner{
+  position:absolute;inset:24px;
+  border:1px solid rgba(255,255,255,.04);
+  transform:rotate(45deg);
+}
+.gem-center{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:52px;
+}
+.gem-glow{
+  position:absolute;inset:-40px;
+  border-radius:50%;
+  animation:pulse 3s ease-in-out infinite;
+}
+.gem-lines{
+  position:absolute;inset:0;
+  transform:rotate(45deg);overflow:hidden;
+}
+.coll-info{
+  padding:60px 48px 60px 40px;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.coll-cat{
+  font-size:8px;letter-spacing:.45em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;
+}
+.coll-name{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,5vw,56px);
+  color:#fff;font-weight:400;margin-bottom:8px;line-height:1;
+}
+.coll-sub{
+  font-family:'Playfair Display',serif;
+  font-size:16px;color:rgba(255,255,255,.3);
+  font-style:italic;margin-bottom:24px;
+}
+.coll-desc{
+  font-size:12px;color:rgba(255,255,255,.38);
+  line-height:2;margin-bottom:24px;max-width:400px;
+}
+.coll-tag{
+  font-size:9px;letter-spacing:.2em;
+  color:rgba(255,255,255,.2);
+  border-top:1px solid rgba(255,255,255,.06);
+  padding-top:20px;margin-bottom:16px;
+}
+.coll-price{
+  font-family:'Playfair Display',serif;
+  font-size:28px;color:#fff;margin-bottom:24px;
+}
+.coll-btns{display:flex;gap:12px}
+
+/* ══ ASTRO MATCH ════════════════════════════════════════════ */
+#astro{background:var(--charcoal);padding:100px 0}
+.astro-inner{max-width:1120px;margin:0 auto;padding:0 48px}
+.astro-grid{
+  display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:start;
+  margin-top:60px;
+}
+.astro-card{
+  border:1px solid rgba(201,169,110,.12);
+  position:relative;overflow:hidden;
+  padding:48px 36px;
+}
+.astro-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:1px;
+  background:linear-gradient(to right,transparent,var(--gold),transparent);
+}
+.astro-form-lbl{
+  font-size:8px;letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(255,255,255,.28);margin-bottom:8px;display:block;
+}
+.astro-input{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  color:#fff;padding:12px 16px;
+  font-size:12px;font-family:'Sarabun',sans-serif;
+  outline:none;transition:border .3s;margin-bottom:20px;
+}
+.astro-input:focus{border-color:rgba(201,169,110,.5)}
+.astro-purpose-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:28px;
+}
+.purpose-btn{
+  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
+  padding:10px 12px;border:1px solid rgba(255,255,255,.08);
+  background:transparent;color:rgba(255,255,255,.28);
+  cursor:pointer;font-family:'Sarabun',sans-serif;
+  transition:all .3s;text-align:center;
+}
+.purpose-btn.sel,.purpose-btn:hover{
+  border-color:var(--gold);color:var(--gold);
+  background:rgba(201,169,110,.05);
+}
+.astro-btn{
+  width:100%;padding:16px;
+  background:var(--gold);color:var(--obsidian);border:none;
+  font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  font-family:'Sarabun',sans-serif;cursor:pointer;
+  transition:all .4s;
+}
+.astro-btn:hover{background:var(--gold-dark);color:#fff}
+.astro-btn:disabled{opacity:.4;cursor:not-allowed}
+.astro-result{
+  margin-top:32px;padding-top:28px;
+  border-top:1px solid rgba(201,169,110,.1);
+  display:none;
+}
+.astro-result.show{display:block}
+.result-sign{
+  text-align:center;margin-bottom:24px;
+}
+.result-sign-name{
+  font-family:'Playfair Display',serif;
+  font-size:28px;color:#fff;margin-bottom:4px;
+}
+.result-sign-el{
+  font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);
+}
+.stones-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.stone-card{
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.04);
+  padding:16px 10px;text-align:center;
+  transition:all .4s;cursor:pointer;
+}
+.stone-card:hover,.stone-card.top{border-color:rgba(201,169,110,.3)}
+.stone-icon{font-size:24px;margin-bottom:6px}
+.stone-name{font-size:10px;color:#fff;margin-bottom:3px}
+.stone-ben{font-size:8px;color:rgba(255,255,255,.25);line-height:1.5}
+.stone-dots{display:flex;justify-content:center;gap:3px;margin-top:6px}
+.stone-dot{width:4px;height:4px;border-radius:50%}
+.rec-box{
+  background:rgba(201,169,110,.04);
+  border:1px solid rgba(201,169,110,.15);
+  padding:20px;text-align:center;
+}
+.rec-txt{
+  font-family:'Playfair Display',serif;
+  font-size:13px;color:var(--gold-light);
+  font-style:italic;line-height:1.8;margin-bottom:14px;
+}
+
+/* ══ BESPOKE ════════════════════════════════════════════════ */
+#bespoke{background:var(--obsidian);padding:100px 0}
+.bespoke-inner{max-width:1120px;margin:0 auto;padding:0 48px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:60px}
+.step{
+  background:rgba(255,255,255,.02);
+  border-top:2px solid rgba(255,255,255,.05);
+  padding:36px 24px;
+  transition:all .4s;
+  position:relative;
+}
+.step:hover{background:rgba(201,169,110,.04);border-top-color:var(--gold)}
+.step-n{
+  font-family:'Playfair Display',serif;
+  font-size:48px;color:rgba(255,255,255,.04);
+  line-height:1;margin-bottom:16px;font-weight:700;
+}
+.step-icon{font-size:24px;margin-bottom:16px}
+.step-t{
+  font-family:'Playfair Display',serif;
+  font-size:16px;color:#fff;margin-bottom:10px;
+}
+.step-d{font-size:11px;color:rgba(255,255,255,.28);line-height:1.8}
+
+/* ══ CRM PREVIEW ════════════════════════════════════════════ */
+#crm{background:var(--charcoal);padding:100px 0}
+.crm-wrap{max-width:1120px;margin:0 auto;padding:0 48px}
+.crm-ui{
+  display:grid;grid-template-columns:240px 1fr;
+  margin-top:60px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.05);
+}
+.crm-sidebar{background:var(--obsidian);padding:24px 0}
+.crm-sb-hd{
+  font-size:8px;letter-spacing:.35em;text-transform:uppercase;
+  color:rgba(255,255,255,.2);padding:0 20px 16px;
+}
+.crm-client{
+  padding:14px 20px;cursor:pointer;
+  border-left:2px solid transparent;
+  transition:all .3s;
+}
+.crm-client:hover,.crm-client.on{
+  background:rgba(201,169,110,.06);
+  border-left-color:var(--gold);
+}
+.crm-cn{
+  font-size:12px;color:rgba(255,255,255,.7);
+  font-family:'Playfair Display',serif;margin-bottom:4px;
+}
+.crm-ct{
+  display:inline-block;
+  font-size:7px;letter-spacing:.2em;text-transform:uppercase;
+  padding:2px 8px;margin-bottom:4px;
+}
+.ct-vvip{background:rgba(201,169,110,.15);color:var(--gold)}
+.ct-vip{background:rgba(155,127,166,.15);color:var(--amethyst)}
+.ct-reg{background:rgba(90,138,114,.15);color:var(--emerald)}
+.crm-cs{font-size:9px;color:rgba(255,255,255,.25)}
+.crm-main{background:#fff;padding:32px}
+.crm-top{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  padding-bottom:20px;border-bottom:1px solid var(--ivory);margin-bottom:24px;
+}
+.crm-av{
+  width:52px;height:52px;border-radius:50%;
+  background:var(--gold-light);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;font-size:20px;
+  color:var(--gold-dark);margin-bottom:8px;
+}
+.crm-nm{
+  font-family:'Playfair Display',serif;
+  font-size:20px;color:#1a1612;margin-bottom:3px;
+}
+.crm-mt{font-size:10px;color:var(--mist);letter-spacing:.1em}
+.crm-tier-badge{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--ivory);color:var(--stone);
+  padding:4px 12px;display:inline-block;margin-top:6px;
+}
+.crm-add-btn{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  background:var(--gold);color:#fff;border:none;
+  padding:9px 18px;cursor:pointer;
+  font-family:'Sarabun',sans-serif;
+}
+.crm-g{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.crm-f label{
+  font-size:8px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--mist);display:block;margin-bottom:5px;
+}
+.crm-f p{font-size:12px;color:#1a1612}
+.gem-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.gem-chip{
+  font-size:9px;padding:4px 12px;
+  border:1px solid var(--gold-light);color:var(--gold-dark);
+}
+.tl{margin-top:20px}
+.tl-hd{
+  font-size:8px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--mist);margin-bottom:14px;
+}
+.tl-item{
+  display:flex;gap:14px;margin-bottom:14px;
+  padding-left:16px;border-left:1px solid var(--ivory);
+}
+.tl-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--gold);flex-shrink:0;margin-top:4px;
+  margin-left:-20px;
+}
+.tl-txt{font-size:10px;color:var(--stone);line-height:1.7}
+.tl-date{font-size:8px;color:var(--mist);letter-spacing:.1em}
+
+/* ══ PRICING ════════════════════════════════════════════════ */
+#pricing{background:var(--ivory);padding:100px 0}
+.pricing-inner{max-width:1120px;margin:0 auto;padding:0 48px}
+.pricing-inner .sec-h,.pricing-inner .sec-lbl,.pricing-inner .sec-p{color:var(--charcoal)}
+.pricing-inner .sec-lbl{color:var(--gold-dark)}
+.pricing-inner .sec-p{color:var(--stone)}
+.phase-cards{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:2px;margin-top:60px;
+}
+.phase-card{padding:48px 32px;position:relative;overflow:hidden}
+.ph1{background:#fff}
+.ph2{background:var(--charcoal)}
+.ph3{background:var(--gold)}
+.ph-bg-num{
+  position:absolute;bottom:-20px;right:12px;
+  font-family:'Playfair Display',serif;
+  font-size:100px;font-weight:700;opacity:.05;line-height:1;
+  pointer-events:none;
+}
+.ph2 .ph-bg-num,.ph3 .ph-bg-num{color:#fff}
+.ph-label{
+  font-size:8px;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:12px;
+}
+.ph2 .ph-label{color:var(--gold)}
+.ph3 .ph-label{color:rgba(255,255,255,.7)}
+.ph-title{
+  font-family:'Playfair Display',serif;
+  font-size:22px;margin-bottom:24px;color:var(--charcoal);
+}
+.ph2 .ph-title,.ph3 .ph-title{color:#fff}
+.ph-list{list-style:none;margin-bottom:28px}
+.ph-list li{
+  font-size:11px;color:var(--stone);
+  padding:8px 0;border-bottom:1px solid var(--ivory);
+  display:flex;align-items:center;gap:8px;font-weight:300;
+}
+.ph2 .ph-list li{
+  color:rgba(255,255,255,.45);border-bottom-color:rgba(255,255,255,.05);
+}
+.ph3 .ph-list li{
+  color:rgba(255,255,255,.8);border-bottom-color:rgba(255,255,255,.2);
+}
+.ph-list li::before{content:'◆';font-size:5px;color:var(--gold);flex-shrink:0}
+.ph3 .ph-list li::before{color:rgba(255,255,255,.5)}
+.ph-price{
+  font-family:'Playfair Display',serif;
+  font-size:32px;color:var(--charcoal);
+}
+.ph2 .ph-price{color:var(--gold)}
+.ph3 .ph-price{color:#fff}
+.ph-price-note{
+  font-size:10px;color:var(--mist);margin-top:3px;
+  letter-spacing:.05em;
+}
+.ph3 .ph-price-note{color:rgba(255,255,255,.5)}
+.ph-dur{
+  font-size:10px;color:var(--mist);
+  display:flex;align-items:center;gap:4px;margin-top:6px;
+}
+.ph2 .ph-dur,.ph3 .ph-dur{color:rgba(255,255,255,.25)}
+/* Summary bar */
+.pricing-summary{
+  background:var(--charcoal);
+  padding:36px 40px;margin-top:2px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:20px;
+}
+.ps-left{}
+.ps-note{font-size:10px;color:rgba(255,255,255,.3);margin-bottom:6px}
+.ps-total{
+  font-family:'Playfair Display',serif;
+  font-size:40px;color:#fff;font-weight:400;
+}
+.ps-right{display:flex;gap:12px;flex-wrap:wrap}
+.ps-stat{
+  background:rgba(255,255,255,.04);
+  padding:16px 24px;text-align:center;
+}
+.ps-stat-n{
+  font-family:'Playfair Display',serif;
+  font-size:24px;color:var(--gold);
+}
+.ps-stat-l{
+  font-size:8px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.2);margin-top:4px;
+}
+/* Annual cost */
+.annual-box{
+  margin-top:2px;background:rgba(201,169,110,.05);
+  border:1px solid rgba(201,169,110,.15);
+  padding:28px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.annual-left{}
+.annual-title{
+  font-size:9px;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--gold-dark);margin-bottom:8px;
+}
+.annual-cost{
+  font-family:'Playfair Display',serif;
+  font-size:32px;color:var(--charcoal);
+}
+.annual-desc{font-size:11px;color:var(--stone);margin-top:4px}
+.annual-right{}
+.annual-breakdown{
+  display:flex;gap:20px;flex-wrap:wrap;
+}
+.ab-item{text-align:center}
+.ab-item-v{
+  font-family:'Playfair Display',serif;
+  font-size:22px;color:var(--charcoal);
+}
+.ab-item-l{
+  font-size:8px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--mist);margin-top:2px;
+}
+/* Stack */
+.stack-row{
+  display:flex;flex-wrap:wrap;gap:2px;margin-top:40px;
+}
+.stack-item{
+  background:#fff;padding:18px 24px;
+  flex:1;min-width:130px;
+  transition:all .3s;
+}
+.stack-item:hover{background:var(--charcoal)}
+.stack-item:hover .si-name{color:var(--gold)}
+.stack-item:hover .si-role{color:rgba(255,255,255,.3)}
+.stack-item:hover .si-free{color:var(--emerald)}
+.si-name{
+  font-family:'Playfair Display',serif;
+  font-size:15px;color:var(--charcoal);margin-bottom:3px;
+}
+.si-role{font-size:9px;color:var(--mist)}
+.si-free{
+  font-size:7px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--emerald);margin-top:5px;
+}
+
+/* ══ CTA ═════════════════════════════════════════════════════ */
+#cta{
+  background:var(--obsidian);
+  padding:140px 48px;text-align:center;
+  position:relative;overflow:hidden;
+}
+#cta::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,169,110,.09),transparent);
+}
+.cta-eye{
+  font-size:8px;letter-spacing:.55em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:28px;
+}
+.cta-h{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(36px,6vw,72px);
+  color:#fff;font-weight:400;line-height:1.1;
+  margin-bottom:20px;position:relative;
+}
+.cta-h em{color:var(--gold);font-style:italic}
+.cta-p{
+  font-size:13px;color:rgba(255,255,255,.28);
+  max-width:440px;margin:0 auto 52px;
+  line-height:2.1;font-weight:300;position:relative;
+}
+.cta-btns{
+  display:flex;gap:14px;justify-content:center;
+  flex-wrap:wrap;position:relative;
+}
+.cta-dev-info{
+  margin-top:52px;font-size:10px;
+  color:rgba(255,255,255,.15);letter-spacing:.15em;
+  position:relative;
+}
+.cta-dev-info a{color:var(--gold);text-decoration:none}
+
+/* ══ FOOTER ══════════════════════════════════════════════════ */
+footer{
+  background:#040302;
+  padding:40px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+  border-top:1px solid rgba(255,255,255,.04);
+}
+footer p{font-size:9px;color:rgba(255,255,255,.15);letter-spacing:.1em}
+
+/* ══ RESPONSIVE ══════════════════════════════════════════════ */
+@media(max-width:768px){
+  nav{padding:16px 20px}
+  nav.solid{padding:12px 20px}
+  .nav-links{display:none}
+  .sec{padding:72px 20px}
+  .story-inner{grid-template-columns:1fr;padding:0 20px}
+  .coll-panel.show{grid-template-columns:1fr}
+  .astro-grid{grid-template-columns:1fr;padding:0 20px}
+  .crm-ui{grid-template-columns:1fr}
+  .crm-sidebar{display:none}
+  .phase-cards{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .demo-bar{padding:10px 16px}
+  #cta{padding:80px 20px}
+  footer{padding:28px 20px}
+  .pricing-inner,.bespoke-inner,.crm-wrap,.coll-tabs,.coll-panel,.astro-inner{
+    padding-left:20px;padding-right:20px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav id="mainNav">
+  <a class="logo" href="#hero">
+    <span class="logo-main"><em>Migi</em>James</span>
+    <span class="logo-sub">Jewelry Story Telling</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#story">Story</a></li>
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#astro">Astro Match</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <button class="nav-cta" onclick="scroll2('#cta')">นัดปรึกษา</button>
+</nav>
+
+<!-- ══ DEMO BAR ══ -->
+<div class="demo-bar">
+  <div class="demo-bar-left">🔮 <strong>Demo Proposal</strong> &nbsp;·&nbsp; พัฒนาโดย ครูเด่น มาสเตอร์ฟา &nbsp;·&nbsp; CAP Vision Institute</div>
+  <div class="demo-tabs">
+    <button class="demo-tab" onclick="scroll2('#story')">Phase 1</button>
+    <button class="demo-tab" onclick="scroll2('#crm')">Phase 2</button>
+    <button class="demo-tab" onclick="scroll2('#astro')">Phase 3</button>
+    <button class="demo-tab active" onclick="scroll2('#pricing')">ค่าบริการ</button>
+  </div>
+</div>
+
+<!-- ══ HERO ══ -->
+<section id="hero">
+  <div class="hero-atmos"></div>
+  <div class="dot-grid"></div>
+  <div class="diamond-bg">
+    <svg viewBox="0 0 500 500">
+      <polygon points="250,28 472,175 402,472 98,472 28,175" fill="none" stroke="#c9a96e" stroke-width=".5"/>
+      <line x1="250" y1="28" x2="472" y2="175" stroke="#c9a96e" stroke-width=".25"/>
+      <line x1="250" y1="28" x2="28" y2="175" stroke="#c9a96e" stroke-width=".25"/>
+      <line x1="250" y1="28" x2="250" y2="472" stroke="#c9a96e" stroke-width=".2"/>
+      <line x1="28" y1="175" x2="472" y2="175" stroke="#c9a96e" stroke-width=".2"/>
+      <line x1="250" y1="250" x2="472" y2="175" stroke="#c9a96e" stroke-width=".25"/>
+      <line x1="250" y1="250" x2="28" y2="175" stroke="#c9a96e" stroke-width=".25"/>
+      <line x1="250" y1="250" x2="402" y2="472" stroke="#c9a96e" stroke-width=".25"/>
+      <line x1="250" y1="250" x2="98" y2="472" stroke="#c9a96e" stroke-width=".25"/>
+      <circle cx="250" cy="250" r="180" fill="none" stroke="#c9a96e" stroke-width=".3"/>
+      <circle cx="250" cy="250" r="90" fill="none" stroke="#c9a96e" stroke-width=".2"/>
+    </svg>
+  </div>
+  <!-- Particles -->
+  <script>
+    ;[...Array(16)].forEach((_,i)=>{
+      const el=document.createElement('div')
+      el.className='p'
+      el.style.cssText=`left:${6+(i*5.8)%86}%;bottom:-8px;width:${i%4===0?3:2}px;height:${i%4===0?3:2}px;animation-duration:${10+(i%5)*3}s;animation-delay:${i*.65}s`
+      document.getElementById('hero').appendChild(el)
+    })
+  </script>
+
+  <div class="hero-body">
+    <div class="hero-eye">Jewelry Story Telling · Since 2018</div>
+    <h1 class="hero-name"><em>Migi</em>James</h1>
+    <p class="hero-tagline">เพชรที่เลือกคุณ — ไม่ใช่คุณเลือกเพชร</p>
+    <p class="hero-desc">
+      เราไม่ได้ขายเครื่องประดับ<br>
+      เราออกแบบพลังงานเฉพาะบุคคล<br>
+      ผ่านศาสตร์อัญมณีและพื้นดวงชะตา
+    </p>
+    <div class="hero-btns">
+      <button class="btn-g" onclick="scroll2('#astro')">🔮 วิเคราะห์ดวงฟรี</button>
+      <button class="btn-o" onclick="scroll2('#collections')">ชม Collection</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-n">500+</div><div class="hero-stat-l">ชิ้นงาน Bespoke</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">7+</div><div class="hero-stat-l">ปีประสบการณ์</div></div>
+      <div class="hero-stat"><div class="hero-stat-n">100%</div><div class="hero-stat-l">เฉพาะบุคคล</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span><div class="scroll-hint-line"></div>
+  </div>
+</section>
+
+<!-- ══ STORY ══ -->
+<section id="story">
+  <div class="story-inner">
+    <div>
+      <div class="sec-lbl">Phase 1 · Brand Presence</div>
+      <h2 class="sec-h" style="color:#fff">ทำไม MigiJames<br>ถึง<em>ต่างจากทุกที่</em></h2>
+      <div class="gold-sep"></div>
+      <p class="sec-p">ร้านเพชรทั่วไปขายสินค้า MigiJames ขายประสบการณ์และพลังงาน ทุกชิ้นงานเริ่มจากการทำความเข้าใจตัวตนและดวงชะตาของคุณอย่างลึกซึ้ง</p>
+    </div>
+    <div>
+      <p class="story-quote">
+        "เมื่อคุณสวมอัญมณีที่<em>ถูกดวง</em><br>มันไม่ใช่แค่เครื่องประดับ<br>มันคือพลังงานที่เสริมตัวตนของคุณ"
+      </p>
+      <div class="story-blocks">
+        <div class="story-block"><div class="story-block-icon">🔮</div><div class="story-block-t">วิเคราะห์พื้นดวง</div><div class="story-block-d">ทุกชิ้นเริ่มจากการวิเคราะห์ดวงชะตาเชิงลึก</div></div>
+        <div class="story-block"><div class="story-block-icon">✦</div><div class="story-block-t">ออกแบบเฉพาะตัว</div><div class="story-block-d">ไม่มีชิ้นไหนเหมือนกันในโลก</div></div>
+        <div class="story-block"><div class="story-block-icon">💎</div><div class="story-block-t">คัดสรรอัญมณี</div><div class="story-block-d">เลือกอัญมณีตรงกับธาตุและราศีของคุณ</div></div>
+        <div class="story-block"><div class="story-block-icon">♾️</div><div class="story-block-t">พลังงานยั่งยืน</div><div class="story-block-d">ไม่ใช่แค่ความสวย แต่คือพลังงานที่คงอยู่</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ COLLECTIONS ══ -->
+<section id="collections" style="background:var(--obsidian);padding:100px 0">
+  <div class="sec" style="padding-bottom:0">
+    <div class="sec-lbl">Phase 1 · Portfolio & Collections</div>
+    <h2 class="sec-h">ผลงาน<em>สั่งทำ</em>พิเศษ</h2>
+  </div>
+  <div class="coll-tabs">
+    <button class="coll-tab active" onclick="showColl(0,this)">ECLIPSE</button>
+    <button class="coll-tab" onclick="showColl(1,this)">AURORA</button>
+    <button class="coll-tab" onclick="showColl(2,this)">SOLEIL</button>
+    <button class="coll-tab" onclick="showColl(3,this)">VERT</button>
+  </div>
+
+  <!-- Eclipse -->
+  <div class="coll-panel show" id="cp0" style="background:linear-gradient(135deg,#0a0a12,#12101a)">
+    <div class="coll-visual">
+      <div class="gem-3d">
+        <div class="gem-glow" style="background:radial-gradient(circle,rgba(139,107,200,.2),transparent)"></div>
+        <div class="gem-outer" style="background:linear-gradient(135deg,rgba(139,107,200,.08),transparent)"></div>
+        <div class="gem-inner"></div>
+        <div class="gem-center">💎</div>
+      </div>
+      <div style="position:absolute;inset:0;pointer-events:none">
+        <div style="position:absolute;top:20%;left:20%;width:4px;height:4px;background:#8b7cf8;border-radius:50%;box-shadow:0 0 12px #8b7cf8;animation:pulse 2s infinite"></div>
+        <div style="position:absolute;top:70%;right:25%;width:3px;height:3px;background:#c9a96e;border-radius:50%;box-shadow:0 0 8px #c9a96e;animation:pulse 3s 1s infinite"></div>
+        <div style="position:absolute;top:45%;left:15%;width:2px;height:2px;background:#fff;border-radius:50%;animation:pulse 2.5s .5s infinite"></div>
+      </div>
+    </div>
+    <div class="coll-info">
+      <div class="coll-cat">Black Diamond Collection</div>
+      <div class="coll-name">ECLIPSE</div>
+      <div class="coll-sub">ความมืดที่มีพลัง</div>
+      <div class="coll-desc">เพชรดำหายากจากแหล่งที่ลึกที่สุดของโลก ออกแบบสำหรับผู้ที่มีพลังงานเงียบแต่ทรงพลัง เหมาะกับราศีมกร พิจิก และกุมภ์</div>
+      <div class="coll-tag">Black Diamond · 18K White Gold · Platinum Setting</div>
+      <div class="coll-price">เริ่มต้น ฿ 285,000</div>
+      <div class="coll-btns">
+        <button class="btn-g" onclick="scroll2('#astro')" style="font-size:9px;padding:12px 24px">วิเคราะห์ดวงก่อน</button>
+        <button class="btn-o" onclick="scroll2('#cta')" style="font-size:9px;padding:12px 24px">สอบถาม</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aurora -->
+  <div class="coll-panel" id="cp1" style="background:linear-gradient(135deg,#08101a,#0d1830)">
+    <div class="coll-visual">
+      <div class="gem-3d">
+        <div class="gem-glow" style="background:radial-gradient(circle,rgba(41,128,185,.2),transparent)"></div>
+        <div class="gem-outer" style="background:linear-gradient(135deg,rgba(41,128,185,.08),transparent)"></div>
+        <div class="gem-inner"></div>
+        <div class="gem-center">💙</div>
+      </div>
+    </div>
+    <div class="coll-info">
+      <div class="coll-cat">Sapphire & Diamond Collection</div>
+      <div class="coll-name">AURORA</div>
+      <div class="coll-sub">แสงแรกของรุ่งอรุณ</div>
+      <div class="coll-desc">ไพลินศรีลังกาที่หายากผสานกับเพชรขาวบริสุทธิ์ เหมาะกับราศีกรกฎ กุมภ์ และมีน ที่มีธาตุน้ำเป็นพลังหลัก</div>
+      <div class="coll-tag">Ceylon Sapphire · Diamond · Platinum</div>
+      <div class="coll-price">เริ่มต้น ฿ 420,000</div>
+      <div class="coll-btns">
+        <button class="btn-g" onclick="scroll2('#astro')" style="font-size:9px;padding:12px 24px;background:#2980b9;border:none">วิเคราะห์ดวงก่อน</button>
+        <button class="btn-o" onclick="scroll2('#cta')" style="font-size:9px;padding:12px 24px">สอบถาม</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Soleil -->
+  <div class="coll-panel" id="cp2" style="background:linear-gradient(135deg,#150e00,#241600)">
+    <div class="coll-visual">
+      <div class="gem-3d">
+        <div class="gem-glow" style="background:radial-gradient(circle,rgba(212,175,55,.25),transparent)"></div>
+        <div class="gem-outer" style="background:linear-gradient(135deg,rgba(212,175,55,.1),transparent)"></div>
+        <div class="gem-inner"></div>
+        <div class="gem-center">💛</div>
+      </div>
+    </div>
+    <div class="coll-info">
+      <div class="coll-cat">Fancy Yellow Diamond</div>
+      <div class="coll-name">SOLEIL</div>
+      <div class="coll-sub">พลังแห่งดวงอาทิตย์</div>
+      <div class="coll-desc">Fancy Vivid Yellow Diamond ระดับ GIA ที่หาได้ยากยิ่ง เหมาะกับราศีสิงห์ เมษ และธนู ที่มีธาตุไฟเป็นพลังหลัก</div>
+      <div class="coll-tag">Fancy Yellow Diamond · 22K Gold</div>
+      <div class="coll-price">เริ่มต้น ฿ 680,000</div>
+      <div class="coll-btns">
+        <button class="btn-g" onclick="scroll2('#astro')" style="font-size:9px;padding:12px 24px">วิเคราะห์ดวงก่อน</button>
+        <button class="btn-o" onclick="scroll2('#cta')" style="font-size:9px;padding:12px 24px">สอบถาม</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vert -->
+  <div class="coll-panel" id="cp3" style="background:linear-gradient(135deg,#041208,#061a0c)">
+    <div class="coll-visual">
+      <div class="gem-3d">
+        <div class="gem-glow" style="background:radial-gradient(circle,rgba(39,174,96,.2),transparent)"></div>
+        <div class="gem-outer" style="background:linear-gradient(135deg,rgba(39,174,96,.08),transparent)"></div>
+        <div class="gem-inner"></div>
+        <div class="gem-center">💚</div>
+      </div>
+    </div>
+    <div class="coll-info">
+      <div class="coll-cat">Colombian Emerald</div>
+      <div class="coll-name">VERT</div>
+      <div class="coll-sub">สีเขียวลึกที่สุดของโลก</div>
+      <div class="coll-desc">มรกตโคลอมเบียเกรด AAA เหมาะกับราศีพฤษภ กันย์ และมกร ที่มีธาตุดินเป็นพลังหลัก</div>
+      <div class="coll-tag">Colombian Emerald · Diamond · 18K Gold</div>
+      <div class="coll-price">เริ่มต้น ฿ 195,000</div>
+      <div class="coll-btns">
+        <button class="btn-g" onclick="scroll2('#astro')" style="font-size:9px;padding:12px 24px;background:#27ae60;border:none">วิเคราะห์ดวงก่อน</button>
+        <button class="btn-o" onclick="scroll2('#cta')" style="font-size:9px;padding:12px 24px">สอบถาม</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ASTRO ══ -->
+<section id="astro">
+  <div class="astro-inner">
+    <div class="sec-lbl">Phase 3 · Feature พิเศษเฉพาะ MigiJames</div>
+    <h2 class="sec-h">อัญมณีที่<em>ถูกดวง</em>กับคุณ</h2>
+    <div class="astro-grid">
+      <div>
+        <p class="sec-p">กรอกวันเกิด ระบบวิเคราะห์ราศี ธาตุ และแนะนำอัญมณีที่เสริมพลังงานตรงกับดวงชะตาของคุณโดยเฉพาะ — นี่คือสิ่งที่ทำให้ MigiJames แตกต่างจากทุกร้านเพชรในประเทศไทย</p>
+        <div class="gold-sep"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:32px">
+          <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);padding:20px;text-align:center">
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--gold)">12</div>
+            <div style="font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:4px">ราศี</div>
+          </div>
+          <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);padding:20px;text-align:center">
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--gold)">4</div>
+            <div style="font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:4px">ธาตุ</div>
+          </div>
+          <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);padding:20px;text-align:center">
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--gold)">30+</div>
+            <div style="font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:4px">อัญมณี</div>
+          </div>
+          <div style="background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);padding:20px;text-align:center">
+            <div style="font-family:'Playfair Display',serif;font-size:22px;color:var(--gold)">∞</div>
+            <div style="font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:4px">Bespoke</div>
+          </div>
+        </div>
+      </div>
+      <div class="astro-card">
+        <div style="font-size:9px;letter-spacing:.4em;text-transform:uppercase;color:rgba(201,169,110,.6);text-align:center;margin-bottom:24px">✦ &nbsp; Astro-Gem Matching &nbsp; ✦</div>
+        <label class="astro-form-lbl">วันเกิด</label>
+        <input class="astro-input" type="date" id="bd" value="1990-03-15"/>
+        <label class="astro-form-lbl">วัตถุประสงค์</label>
+        <div class="astro-purpose-grid">
+          <button class="purpose-btn sel" id="p_money" onclick="selP('money',this)">✦ การเงิน</button>
+          <button class="purpose-btn" id="p_love" onclick="selP('love',this)">♡ ความรัก</button>
+          <button class="purpose-btn" id="p_health" onclick="selP('health',this)">◈ สุขภาพ</button>
+          <button class="purpose-btn" id="p_power" onclick="selP('power',this)">◆ อำนาจ</button>
+        </div>
+        <button class="astro-btn" id="astroBtn" onclick="doAstro()">🔮 วิเคราะห์ดวงและแนะนำอัญมณี</button>
+        <div class="astro-result" id="astroRes">
+          <div class="result-sign">
+            <div class="result-sign-name" id="rName"></div>
+            <div class="result-sign-el" id="rEl"></div>
+          </div>
+          <div class="stones-grid" id="rStones"></div>
+          <div class="rec-box">
+            <div class="rec-txt" id="rMsg"></div>
+            <button class="btn-g" onclick="scroll2('#cta')" style="font-size:9px;padding:12px 28px">นัดปรึกษากับ MigiJames</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BESPOKE ══ -->
+<section id="bespoke">
+  <div class="bespoke-inner">
+    <div class="sec-lbl">Phase 2 · Bespoke Journey</div>
+    <h2 class="sec-h">กระบวนการ<em>สั่งทำ</em></h2>
+    <p class="sec-p">ทุกชิ้นงาน Bespoke เริ่มจากการทำความเข้าใจตัวตนของคุณอย่างลึกซึ้ง ผ่าน 4 ขั้นตอนที่ออกแบบมาเพื่อสร้างชิ้นงานที่สมบูรณ์แบบที่สุด</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-n">01</div>
+        <div class="step-icon">🔮</div>
+        <div class="step-t">วิเคราะห์พื้นดวง</div>
+        <div class="step-d">นัดปรึกษาส่วนตัว วิเคราะห์ดวงชะตา ธาตุ และพลังงานที่คุณต้องการเสริม</div>
+      </div>
+      <div class="step">
+        <div class="step-n">02</div>
+        <div class="step-icon">✦</div>
+        <div class="step-t">เลือกอัญมณี</div>
+        <div class="step-d">เลือกอัญมณีที่เหมาะกับดวงของคุณด้วยตัวเอง พร้อมคำอธิบายพลังงานแต่ละเม็ด</div>
+      </div>
+      <div class="step">
+        <div class="step-n">03</div>
+        <div class="step-icon">✏️</div>
+        <div class="step-t">ออกแบบ</div>
+        <div class="step-d">ร่วมออกแบบชิ้นงานกับช่างฝีมือ ติดตามความคืบหน้าผ่านระบบ Online</div>
+      </div>
+      <div class="step">
+        <div class="step-n">04</div>
+        <div class="step-icon">💎</div>
+        <div class="step-t">ส่งมอบ</div>
+        <div class="step-d">รับชิ้นงานพร้อมใบรับรอง GIA และบันทึกพลังงานเฉพาะของชิ้นงานนั้น</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CRM PREVIEW ══ -->
+<section id="crm">
+  <div class="crm-wrap">
+    <div class="sec-lbl">Phase 2 · CRM & Client Portal</div>
+    <h2 class="sec-h">รู้จักลูกค้า<em>ลึกกว่าใคร</em></h2>
+    <p class="sec-p">ระบบ CRM ที่ออกแบบมาเพื่อ MigiJames โดยเฉพาะ บันทึกไม่แค่ชื่อ แต่บันทึกพื้นดวง ธาตุ อัญมณีมงคล และประวัติการปรึกษาทุกครั้ง</p>
+    <div class="crm-ui">
+      <div class="crm-sidebar">
+        <div class="crm-sb-hd">ลูกค้า VIP</div>
+        <div class="crm-client on" onclick="selectC(this,'นภา','VVIP','ราศีมีน · ธาตุน้ำ','เพชร · ไพลิน · มุก','13 มีนาคม 2527','ราศีมีน','น้ำ','ดวงการเงินแข็ง เสริมด้วยอัญมณีสีน้ำเงิน-ขาว')">
+          <div class="crm-cn">คุณนภา วงศ์สุวรรณ</div>
+          <span class="crm-ct ct-vvip">VVIP</span>
+          <div class="crm-cs">♓ มีน · เพชร · ไพลิน</div>
+        </div>
+        <div class="crm-client" onclick="selectC(this,'อรุณ','VIP','ราศีพิจิก · ธาตุน้ำ','ทับทิม · การ์เนต','7 พฤศจิกายน 2530','ราศีพิจิก','น้ำ','ดวงอำนาจสูง เสริมด้วยอัญมณีสีแดง-ทอง')">
+          <div class="crm-cn">คุณอรุณ สิทธิชัย</div>
+          <span class="crm-ct ct-vip">VIP</span>
+          <div class="crm-cs">♏ พิจิก · ทับทิม</div>
+        </div>
+        <div class="crm-client" onclick="selectC(this,'มณี','VIP','ราศีเมถุน · ธาตุลม','มรกต · ซิทริน · มุก','21 มิถุนายน 2533','ราศีเมถุน','ลม','ดวงสื่อสารเด่น เสริมด้วยอัญมณีสีเขียว')">
+          <div class="crm-cn">คุณมณี ประภาพร</div>
+          <span class="crm-ct ct-vip">VIP</span>
+          <div class="crm-cs">♊ เมถุน · มรกต</div>
+        </div>
+        <div class="crm-client" onclick="selectC(this,'สุชาดา','Regular','ราศีสิงห์ · ธาตุไฟ','บุษราคัม · ซิทริน','5 สิงหาคม 2535','ราศีสิงห์','ไฟ','ดวงความสำเร็จสูง เสริมด้วยอัญมณีสีเหลือง-ทอง')">
+          <div class="crm-cn">คุณสุชาดา เจริญรัตน์</div>
+          <span class="crm-ct ct-reg">Regular</span>
+          <div class="crm-cs">♌ สิงห์ · บุษราคัม</div>
+        </div>
+      </div>
+      <div class="crm-main">
+        <div class="crm-top">
+          <div>
+            <div class="crm-av" id="cAvatar">น</div>
+            <div class="crm-nm" id="cName">คุณนภา วงศ์สุวรรณ</div>
+            <div class="crm-mt">ลูกค้าตั้งแต่ ม.ค. 2023 · สั่งทำ 3 ชิ้น</div>
+            <span class="crm-tier-badge" id="cTier">VVIP Client</span>
+          </div>
+          <button class="crm-add-btn">+ เพิ่มบันทึก</button>
+        </div>
+        <div class="crm-g">
+          <div class="crm-f"><label>วันเกิด</label><p id="cBirth">13 มีนาคม 2527</p></div>
+          <div class="crm-f"><label>ราศี</label><p id="cSign">ราศีมีน</p></div>
+          <div class="crm-f"><label>ธาตุประจำตัว</label><p id="cEl">น้ำ</p></div>
+          <div class="crm-f"><label>การวิเคราะห์ดวง</label><p id="cRead" style="font-size:11px;color:var(--stone)">ดวงการเงินแข็ง เสริมด้วยอัญมณีสีน้ำเงิน-ขาว</p></div>
+        </div>
+        <div class="crm-f">
+          <label>อัญมณีมงคลประจำตัว</label>
+          <div class="gem-row" id="cGems">
+            <span class="gem-chip">💎 เพชร</span>
+            <span class="gem-chip">💙 ไพลิน</span>
+            <span class="gem-chip">🤍 มุก</span>
+          </div>
+        </div>
+        <div class="tl">
+          <div class="tl-hd">ประวัติการปรึกษา</div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div>
+              <div class="tl-txt">สั่งทำแหวนเพชร 2 กะรัต ประกอบไพลินรอบ — งานเปิดตัวบริษัท</div>
+              <div class="tl-date">15 เม.ย. 2025 · ✅ ส่งมอบแล้ว · ฿ 285,000</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div>
+              <div class="tl-txt">ปรึกษาสร้อยคอสำหรับสามีดวงราศีกรกฎ</div>
+              <div class="tl-date">3 ก.พ. 2025 · 📞 Online Consult</div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:var(--amethyst)"></div>
+            <div>
+              <div class="tl-txt">นัดปรึกษาดวงประจำปี 2568 + วางแผนเครื่องประดับใหม่</div>
+              <div class="tl-date">📅 นัดหมาย: 20 พ.ค. 2025</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section id="pricing">
+  <div class="pricing-inner">
+    <div class="sec-lbl" style="color:var(--gold-dark)">แผนการพัฒนาและค่าบริการ</div>
+    <h2 class="sec-h" style="color:var(--charcoal)">Road Map <em style="color:var(--gold-dark)">3 Phase</em></h2>
+    <p class="sec-p" style="color:var(--stone)">พัฒนาแบบ Phased approach — เริ่มจากสิ่งที่สำคัญที่สุดก่อน เห็นผลเร็ว แล้วค่อยขยายระบบตามการเติบโตของธุรกิจ</p>
+
+    <div class="phase-cards">
+      <div class="phase-card ph1">
+        <div class="ph-bg-num">1</div>
+        <div class="ph-label">Phase 1 · 4–6 สัปดาห์</div>
+        <div class="ph-title">Brand Presence</div>
+        <ul class="ph-list">
+          <li>หน้าแรก Dark Luxury Premium</li>
+          <li>Portfolio ผลงาน + Jewelry Story</li>
+          <li>Contact Form + Email อัตโนมัติ</li>
+          <li>Mobile Responsive ทุก Device</li>
+          <li>SEO พื้นฐาน + Social Meta</li>
+          <li>Deploy บน Cloudflare (ฟรี)</li>
+        </ul>
+        <div class="ph-price">฿ 25,000</div>
+        <div class="ph-price-note">ค่าพัฒนา (จ่ายครั้งเดียว)</div>
+        <div class="ph-dur">⏱ 4–6 สัปดาห์</div>
+      </div>
+      <div class="phase-card ph2">
+        <div class="ph-bg-num">2</div>
+        <div class="ph-label">Phase 2 · 6–8 สัปดาห์</div>
+        <div class="ph-title">CRM & Portal</div>
+        <ul class="ph-list">
+          <li>ระบบ CRM ลูกค้า VIP ครบ</li>
+          <li>บันทึกดวง / ธาตุ / อัญมณีมงคล</li>
+          <li>Private Client Login Portal</li>
+          <li>Bespoke Order Tracker</li>
+          <li>Email / Line แจ้งเตือนอัตโนมัติ</li>
+          <li>Admin Dashboard</li>
+        </ul>
+        <div class="ph-price">฿ 35,000</div>
+        <div class="ph-price-note">ค่าพัฒนา Phase นี้</div>
+        <div class="ph-dur">⏱ 6–8 สัปดาห์</div>
+      </div>
+      <div class="phase-card ph3">
+        <div class="ph-bg-num">3</div>
+        <div class="ph-label">Phase 3 · ต่อเนื่อง</div>
+        <div class="ph-title">AI & Growth</div>
+        <ul class="ph-list">
+          <li>Astro-Gem AI Matching (รันบนเว็บ)</li>
+          <li>Workshop Booking + ชำระเงิน</li>
+          <li>Blog / Content Marketing System</li>
+          <li>Line OA Integration</li>
+          <li>Analytics Dashboard</li>
+          <li>Retainer Support รายเดือน</li>
+        </ul>
+        <div class="ph-price">฿ 40,000</div>
+        <div class="ph-price-note">ค่าพัฒนา Phase นี้</div>
+        <div class="ph-dur">⏱ + ตามตกลง</div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="pricing-summary">
+      <div class="ps-left">
+        <div class="ps-note">รวมค่าพัฒนาทั้ง 3 Phase</div>
+        <div class="ps-total">฿ 100,000</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.25);margin-top:6px">Infrastructure ปีแรก ฟรีทั้งหมด · ไม่มีค่าซ่อนแฝง</div>
+      </div>
+      <div class="ps-right">
+        <div class="ps-stat"><div class="ps-stat-n">฿ 0</div><div class="ps-stat-l">ค่า Hosting ปีแรก</div></div>
+        <div class="ps-stat"><div class="ps-stat-n">3</div><div class="ps-stat-l">Phase สมบูรณ์</div></div>
+        <div class="ps-stat"><div class="ps-stat-n">∞</div><div class="ps-stat-l">ขยายได้เสมอ</div></div>
+      </div>
+    </div>
+
+    <!-- Annual cost -->
+    <div class="annual-box">
+      <div class="annual-left">
+        <div class="annual-title">💡 ค่าใช้จ่ายปีที่ 2 เป็นต้นไป</div>
+        <div class="annual-cost">฿ 680 / ปี</div>
+        <div class="annual-desc">จ่ายเฉพาะค่าต่ออายุโดเมนเนม migijames.com เท่านั้น<br>ค่า Hosting, Database, Storage, Email — <strong>ฟรีทั้งหมด</strong></div>
+      </div>
+      <div class="annual-right">
+        <div class="annual-breakdown">
+          <div class="ab-item"><div class="ab-item-v" style="color:var(--emerald)">฿ 0</div><div class="ab-item-l">Cloudflare Pages</div></div>
+          <div class="ab-item"><div class="ab-item-v" style="color:var(--emerald)">฿ 0</div><div class="ab-item-l">Supabase DB</div></div>
+          <div class="ab-item"><div class="ab-item-v" style="color:var(--emerald)">฿ 0</div><div class="ab-item-l">R2 Storage</div></div>
+          <div class="ab-item"><div class="ab-item-v" style="color:var(--gold-dark)">฿ 680</div><div class="ab-item-l">Domain .com</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tech stack -->
+    <div style="margin-top:40px">
+      <div style="font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:var(--stone);margin-bottom:16px">เทคโนโลยีที่ใช้</div>
+      <div class="stack-row">
+        <div class="stack-item"><div class="si-name">Next.js 14</div><div class="si-role">Frontend + Backend</div><div class="si-free">Open Source</div></div>
+        <div class="stack-item"><div class="si-name">Supabase</div><div class="si-role">Database + CRM + Auth</div><div class="si-free">Free Tier</div></div>
+        <div class="stack-item"><div class="si-name">Cloudflare</div><div class="si-role">Hosting + Storage + CDN</div><div class="si-free">Free Tier</div></div>
+        <div class="stack-item"><div class="si-name">TypeScript</div><div class="si-role">Type-safe Code</div><div class="si-free">Open Source</div></div>
+        <div class="stack-item"><div class="si-name">Resend</div><div class="si-role">Email Automation</div><div class="si-free">Free 3,000/เดือน</div></div>
+        <div class="stack-item"><div class="si-name">Claude API</div><div class="si-role">AI Astro Analysis</div><div class="si-free">Pay-per-use</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section id="cta">
+  <div class="cta-eye">✦ &nbsp; พร้อมเริ่มต้น &nbsp; ✦</div>
+  <h2 class="cta-h">เว็บไซต์ที่สมกับ<br><em>ความเป็น MigiJames</em></h2>
+  <p class="cta-p">ระบบที่ออกแบบมาเพื่อธุรกิจนี้โดยเฉพาะ ไม่ใช่ template สำเร็จรูป — แต่คือตัวตนของคุณในรูปแบบดิจิทัล</p>
+  <div class="cta-btns">
+    <button class="btn-g" style="font-size:11px;padding:18px 44px">✦ เริ่ม Phase 1 ทันที</button>
+    <button class="btn-o" style="font-size:11px;padding:18px 44px">📞 นัดคุยรายละเอียด</button>
+  </div>
+  <div class="cta-dev-info">
+    พัฒนาโดย <strong style="color:var(--gold)">ครูเด่น มาสเตอร์ฟา</strong> &nbsp;·&nbsp;
+    <a href="https://capvisionpartner.com">CAP Vision Institute</a> &nbsp;·&nbsp;
+    @denmasterfa
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div>
+    <div style="font-family:'Playfair Display',serif;font-size:18px;color:rgba(255,255,255,.3)"><em style="color:var(--gold)">Migi</em>James</div>
+    <div style="font-size:8px;color:rgba(255,255,255,.15);margin-top:4px;letter-spacing:.15em">Jewelry Story Telling · Since 2018</div>
+  </div>
+  <p>Demo Proposal · ครูเด่น มาสเตอร์ฟา · CAP Vision Institute · capvisionpartner.com</p>
+  <p>© 2025 MigiJames · All Rights Reserved</p>
+</footer>
+
+<!-- ══ SCRIPTS ══ -->
+<script>
+// Nav scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').classList.toggle('solid',window.scrollY>60)
+},{ passive:true })
+
+// Smooth scroll helper
+function scroll2(id){ document.querySelector(id).scrollIntoView({behavior:'smooth'}) }
+
+// Collections tabs
+function showColl(i,btn){
+  document.querySelectorAll('.coll-tab').forEach(t=>t.classList.remove('active'))
+  btn.classList.add('active')
+  document.querySelectorAll('.coll-panel').forEach((p,j)=>{
+    p.classList.toggle('show',j===i)
+  })
+}
+
+// CRM
+function selectC(el,name,tier,sign,gems,birth,zodiac,el2,reading){
+  document.querySelectorAll('.crm-client').forEach(c=>c.classList.remove('on'))
+  el.classList.add('on')
+  document.getElementById('cAvatar').textContent=name[0]
+  document.getElementById('cName').textContent='คุณ'+name+' (ตัวอย่าง)'
+  document.getElementById('cTier').textContent=tier+' Client'
+  document.getElementById('cBirth').textContent=birth
+  document.getElementById('cSign').textContent=zodiac
+  document.getElementById('cEl').textContent=el2
+  document.getElementById('cRead').textContent=reading
+  document.getElementById('cGems').innerHTML=gems.split('·').map(g=>`<span class="gem-chip">${g.trim()}</span>`).join('')
+}
+
+// Astro engine
+const ZD=[
+  {s:'ราศีเมษ',e:'ไฟ',sm:3,sd:21,stones:[['❤️','ทับทิม','ความกล้า',3],['🔴','การ์เนต','พลังงาน',2],['💎','เพชร','ความสำเร็จ',3]]},
+  {s:'ราศีพฤษภ',e:'ดิน',sm:4,sd:20,stones:[['💚','มรกต','ความมั่งคั่ง',3],['🩷','โรสควอตซ์','ความรัก',2],['💛','บุษราคัม','ความมั่นคง',2]]},
+  {s:'ราศีเมถุน',e:'ลม',sm:5,sd:21,stones:[['💚','มรกต','สติปัญญา',3],['🟡','ซิทริน','การสื่อสาร',2],['🤍','มุก','ความยืดหยุ่น',2]]},
+  {s:'ราศีกรกฎ',e:'น้ำ',sm:6,sd:21,stones:[['🤍','มุก','ความรัก',3],['🌙','มูนสโตน','สัญชาตญาณ',2],['💙','ไพลิน','ความสงบ',3]]},
+  {s:'ราศีสิงห์',e:'ไฟ',sm:7,sd:23,stones:[['💛','บุษราคัม','ชื่อเสียง',3],['💎','เพชร','ความสำเร็จ',3],['❤️','ทับทิม','อำนาจ',2]]},
+  {s:'ราศีกันย์',e:'ดิน',sm:8,sd:23,stones:[['💚','มรกต','สุขภาพ',3],['💙','ไพลิน','ความละเอียด',2],['🤍','มุก','ระเบียบ',2]]},
+  {s:'ราศีตุลย์',e:'ลม',sm:9,sd:23,stones:[['🌈','โอปอล','ความสัมพันธ์',2],['🩷','โรสควอตซ์','ความงาม',2],['💙','แซฟไฟร์','ความสมดุล',3]]},
+  {s:'ราศีพิจิก',e:'น้ำ',sm:10,sd:23,stones:[['❤️','ทับทิม','อำนาจ',3],['⬛','ออนิกซ์','ความเข้มแข็ง',2],['🔴','การ์เนต','พลังแฝง',2]]},
+  {s:'ราศีธนู',e:'ไฟ',sm:11,sd:22,stones:[['🔵','ลาพิสลาซูลี','ภูมิปัญญา',2],['💛','บุษราคัม','โชคลาภ',3],['🩵','เทอร์คอยส์','การเดินทาง',1]]},
+  {s:'ราศีมกร',e:'ดิน',sm:12,sd:22,stones:[['💎','เพชร','ความสำเร็จ',3],['⬛','ออนิกซ์','ความมั่นคง',2],['🔴','การ์เนต','ความอดทน',2]]},
+  {s:'ราศีกุมภ์',e:'ลม',sm:1,sd:20,stones:[['💜','อเมทิสต์','สัญชาตญาณ',3],['🔵','ลาพิสลาซูลี','ความคิด',2],['💙','ไพลิน','นวัตกรรม',2]]},
+  {s:'ราศีมีน',e:'น้ำ',sm:2,sd:19,stones:[['🩵','อความารีน','ความสงบ',3],['💙','ไพลิน','จิตวิญญาณ',2],['🤍','มุก','ความรัก',2]]},
+]
+const PMSG={
+  money:'เสริมพลังงานดึงดูดความมั่งคั่งและโชคลาภ อัญมณีที่แนะนำจะเปิดช่องทางการเงินและโอกาสใหม่ๆ',
+  love:'เปิดพลังงานหัวใจและความสัมพันธ์ อัญมณีเหล่านี้จะดึงดูดความรักและความสุขเข้ามาในชีวิต',
+  health:'สมดุลพลังงานร่างกายและจิตใจ อัญมณีที่เลือกจะเสริมสุขภาพและความมีชีวิตชีวา',
+  power:'เสริมพลังอำนาจและความน่าเชื่อถือ อัญมณีเหล่านี้จะดึงดูดความสำเร็จและการยอมรับ',
+}
+let selPurpose='money'
+function selP(v,btn){
+  selPurpose=v
+  document.querySelectorAll('.purpose-btn').forEach(b=>b.classList.remove('sel'))
+  btn.classList.add('sel')
+}
+function getZodiac(d){
+  const m=d.getMonth()+1,day=d.getDate()
+  const order=[9,10,11,0,1,2,3,4,5,6,7,8]
+  for(let idx of order){
+    const z=ZD[idx]
+    const [nm,nd]=idx<11?[ZD[idx+1].sm,ZD[idx+1].sd]:[ZD[0].sm,ZD[0].sd]
+    if((m===z.sm&&day>=z.sd)||(m===nm&&day<nd)) return z
+  }
+  return ZD[9]
+}
+function doAstro(){
+  const bd=document.getElementById('bd').value
+  if(!bd) return
+  const btn=document.getElementById('astroBtn')
+  btn.textContent='🔮 กำลังวิเคราะห์...'
+  btn.disabled=true
+  setTimeout(()=>{
+    const z=getZodiac(new Date(bd))
+    document.getElementById('rName').textContent=z.s+' — ธาตุ'+z.e
+    document.getElementById('rEl').textContent='อัญมณีเสริม'+{money:'การเงิน',love:'ความรัก',health:'สุขภาพ',power:'อำนาจ'}[selPurpose]
+    const grid=document.getElementById('rStones')
+    grid.innerHTML=z.stones.map(([ico,nm,ben,pw],i)=>`
+      <div class="stone-card${i===0?' top':''}">
+        <div class="stone-icon">${ico}</div>
+        <div class="stone-name">${nm}</div>
+        <div class="stone-ben">${ben}</div>
+        <div class="stone-dots">
+          ${[1,2,3].map(j=>`<div class="stone-dot" style="background:${j<=pw?'var(--gold)':'rgba(255,255,255,.1)'}"></div>`).join('')}
+        </div>
+      </div>
+    `).join('')
+    document.getElementById('rMsg').textContent=`สำหรับ${z.s}ธาตุ${z.e} — ${PMSG[selPurpose]} ${z.stones[0][1]}เป็นอัญมณีหลักที่เสริม${z.stones[0][2]}ได้ดีที่สุดสำหรับดวงของคุณ`
+    const res=document.getElementById('astroRes')
+    res.classList.add('show')
+    res.scrollIntoView({behavior:'smooth',block:'nearest'})
+    btn.textContent='🔮 วิเคราะห์ดวงและแนะนำอัญมณี'
+    btn.disabled=false
+  },900)
+}
+</script>
+</body>
+</html>
