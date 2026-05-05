@@ -297,11 +297,38 @@
       margin-top: 2px
     }
 
+    .summary-box {
+      background: rgba(201, 169, 110, .05);
+      border: 1px solid rgba(201, 169, 110, .2);
+      border-radius: 10px;
+      padding: 18px;
+      margin: 24px 0;
+      display: none;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #1a1612;
+    }
+
+    .summary-total {
+      border-top: 1px dotted #e0d5c8;
+      margin-top: 10px;
+      padding-top: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      color: #c9a96e;
+    }
+
     .bank-rows {
       border-top: 1px solid #e8d5b0;
       padding-top: 14px;
-      display: grid;
-      gap: 8px
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .bank-row {
@@ -576,10 +603,17 @@
             <div class="pay-title">โอนเต็มจำนวน</div>
             <div class="pay-detail">ลด 5% ทันที<br>Phase 1 = ฿23,750</div>
           </button>
-          <button type="button" class="pay-card" data-val="แบ่ง 70/30 — Phase 1 = ฿17,500 + ฿7,500"
+          <button type="button" class="pay-card" data-val="แบ่ง 70/30 — (เริ่ม 70% / ส่งมอบ 30%)"
             onclick="selectCard(this,'paymentMethod')">
             <div class="pay-title">แบ่ง 70/30</div>
-            <div class="pay-detail">70% เริ่มงาน<br>30% ส่งมอบ</div>
+            <div class="pay-detail">
+              70% เริ่มงาน / 30% ส่งมอบ<br>
+              <span style="font-size: 0.85em; opacity: 0.8;">
+                • P1: 17,500 + 7,500<br>
+                • P1+2: 42,000 + 18,000<br>
+                • P1-3: 70,000 + 30,000
+              </span>
+            </div>
           </button>
         </div>
       </div>
@@ -654,6 +688,21 @@
         <textarea id="notes" rows="3" placeholder="เช่น มีรูปสินค้าพร้อม, ต้องการระบบจองด่วน, อื่นๆ"></textarea>
       </div>
 
+      <div id="paymentSummary" class="summary-box">
+        <div class="summary-row">
+          <span>แพ็กเกจ:</span>
+          <span id="sumPackage">-</span>
+        </div>
+        <div class="summary-row">
+          <span>รูปแบบ:</span>
+          <span id="sumMethod">-</span>
+        </div>
+        <div class="summary-row summary-total">
+          <span>ยอดชำระวันนี้:</span>
+          <span id="sumTotal">฿0</span>
+        </div>
+      </div>
+
       <div id="errMsg"></div>
       <button class="submit-btn" id="submitBtn" onclick="submitForm()">
         ✦ &nbsp; ส่งข้อมูลเริ่มต้นโปรเจกต์
@@ -707,6 +756,30 @@
       document.querySelectorAll(`#${group} button`).forEach(b => b.classList.remove('active'))
       btn.classList.add('active')
       state[group] = btn.dataset.val
+      updateSummary()
+    }
+
+    function updateSummary() {
+      if (!state.startPhase || !state.paymentMethod) return;
+
+      const summary = document.getElementById('paymentSummary')
+      summary.style.display = 'block'
+
+      // Extract price from startPhase data-val (e.g. "... ฿25,000")
+      const priceMatch = state.startPhase.match(/฿([\d,]+)/)
+      const price = priceMatch ? parseInt(priceMatch[1].replace(/,/g, '')) : 0
+
+      document.getElementById('sumPackage').textContent = state.startPhase.split('—')[0].trim()
+      document.getElementById('sumMethod').textContent = state.paymentMethod.split('—')[0].trim()
+
+      let todayTotal = 0
+      if (state.paymentMethod.includes('โอนเต็ม')) {
+        todayTotal = price * 0.95
+      } else if (state.paymentMethod.includes('70/30')) {
+        todayTotal = price * 0.70
+      }
+
+      document.getElementById('sumTotal').textContent = '฿' + todayTotal.toLocaleString()
     }
     function copyAcc() {
       navigator.clipboard.writeText('9250137479').then(() => {
