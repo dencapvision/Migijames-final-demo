@@ -690,7 +690,7 @@
   <script>
     // ── Worker URL — เปลี่ยนหลัง deploy Worker ──────────────────
     // ตัวอย่าง: https://migijames-line-proxy.dencapvision.workers.dev
-    const WORKER_URL = 'https://migijames-line-proxy.YOUR_SUBDOMAIN.workers.dev'
+    const WORKER_URL = 'https://migijames-line-proxy.dencapvision.workers.dev'
 
     const state = {
       contactChannel: '', domainExt: '.com',
@@ -755,13 +755,24 @@
 
       try {
         // ส่งไป Cloudflare Worker — Token ซ่อนอยู่ที่ Worker ปลอดภัย 100%
-        await fetch(WORKER_URL, {
+        const res = await fetch(WORKER_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
         })
+
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          console.error('Server error:', errData)
+          btn.disabled = false
+          btn.textContent = '✦   ส่งข้อมูลเริ่มต้นโปรเจกต์'
+          return showErr('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + (errData.error || 'โปรดลองอีกครั้งหรือติดต่อทาง LINE โดยตรง'))
+        }
       } catch (e) {
-        console.error(e)
+        console.error('Network error:', e)
+        btn.disabled = false
+        btn.textContent = '✦   ส่งข้อมูลเริ่มต้นโปรเจกต์'
+        return showErr('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ โปรดตรวจสอบอินเทอร์เน็ตของคุณ')
       }
 
       showSuccess(payload)
