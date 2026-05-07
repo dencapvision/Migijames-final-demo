@@ -6,7 +6,17 @@ name       = "migijames-line-proxy"
 main       = "worker.js"
 compatibility_date = "2024-01-01"
 
-# Environment Variables (Secrets)
-# ตั้งค่าผ่าน CLI หรือ Dashboard — ไม่เก็บใน file นี้
-# รัน: wrangler secret put LINE_TOKEN
-# รัน: wrangler secret put LINE_USER_ID
+# D1 Database Binding
+[[d1_databases]]
+binding      = "DB"
+database_name = "cap-vision-onboarding"
+database_id  = "ba197bcc-1c9f-4d6f-80a1-5d23b3c70ab9"
+
+# Non-sensitive vars (public URLs/IDs)
+[vars]
+SUPABASE_URL = "https://nheppvjayzxlblkeanxs.supabase.co"
+
+# Secrets (set via CLI — never commit these values)
+# wrangler secret put LINE_TOKEN
+# wrangler secret put LINE_USER_ID
+# wrangler secret put SUPABASE_SERVICE_KEY
